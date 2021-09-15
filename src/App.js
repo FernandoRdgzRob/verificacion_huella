@@ -5,6 +5,7 @@ import {
   Route
 } from 'react-router-dom'
 import Login from './components/Login/Login'
+import Profile from './components/Profile'
 import Verification from './components/Verification/Verification'
 import { makeStyles } from '@material-ui/core/styles'
 import Sidebar from './components/Sidebar/Sidebar'
@@ -30,6 +31,11 @@ const routes = [
     path: '/historial',
     sidebar: () => <Sidebar />,
     main: () => <History />
+  },
+  {
+    path: '/Profile',
+    sidebar: () => <Sidebar />,
+    main: () => <Profile />
   }
 ]
 
@@ -68,6 +74,9 @@ function App () {
         <Route exact path='/'>
           <Login />
         </Route>
+        {/* <Route path='/Profile'>
+          <Profile />
+        </Route> */}
       </Switch>
     </Router>
   )
