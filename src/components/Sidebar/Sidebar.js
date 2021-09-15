@@ -69,6 +69,11 @@ const Sidebar = (props) => {
       name: 'Historial',
       icon: <HistoryIcon style={{ color: '#ffffff' }} />,
       route: '/historial'
+    },
+    {
+      name: 'Perfil',
+      icon: <HistoryIcon style={{ color: '#ffffff' }} />,
+      route: '/Profile'
     }
   ]
 
