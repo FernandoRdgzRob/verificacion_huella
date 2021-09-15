@@ -6,17 +6,77 @@ import {
 } from 'react-router-dom'
 import Login from './components/Login/Login'
 import Profile from './components/Profile'
+import Verification from './components/Verification/Verification'
+import { makeStyles } from '@material-ui/core/styles'
+import Sidebar from './components/Sidebar/Sidebar'
+import History from './components/History/History'
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex'
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3)
+  }
+}))
+
+const routes = [
+  {
+    path: '/verificacion',
+    sidebar: () => <Sidebar />,
+    main: () => <Verification />
+  },
+  {
+    path: '/historial',
+    sidebar: () => <Sidebar />,
+    main: () => <History />
+  },
+  {
+    path: '/Profile',
+    sidebar: () => <Sidebar />,
+    main: () => <Profile />
+  }
+]
 
 function App () {
+  const classes = useStyles()
+
   return (
     <Router>
+      <div className={classes.root}>
+        <Switch>
+          {routes.map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              exact={route.exact}
+            >
+              <route.sidebar />
+            </Route>
+          ))}
+        </Switch>
+        <Switch>
+          {routes.map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              exact={route.exact}
+            >
+              <main className={classes.content}>
+                <route.main />
+              </main>
+            </Route>
+          ))}
+        </Switch>
+      </div>
       <Switch>
-        <Route path='/Login'>
+        <Route exact path='/'>
           <Login />
         </Route>
-        <Route path='/Profile'>
+        {/* <Route path='/Profile'>
           <Profile />
-        </Route>
+        </Route> */}
       </Switch>
     </Router>
   )
