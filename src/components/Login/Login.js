@@ -6,13 +6,14 @@ import { Grid, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 // React Router
 import { withRouter } from 'react-router'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 // Utils
 import { emailRegex } from './emailRegex'
 import { CustomForm, useCustomForm } from '../Utils/CustomForm'
 
 const useStyles = makeStyles({
   parentGrid: {
+    padding: 0,
     height: '100vh',
     backgroundColor: '#3f51b5'
   },
@@ -34,6 +35,7 @@ const useStyles = makeStyles({
 
 const Login = (props) => {
   const classes = useStyles()
+  const history = useHistory()
   const { formFunctions, handleSubmit } = useCustomForm()
 
   const form = {
@@ -61,6 +63,7 @@ const Login = (props) => {
 
   const onSubmit = handleSubmit((data) => {
     console.log(data)
+    history.push('/verificacion')
   })
 
   return (
