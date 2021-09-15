@@ -9,20 +9,18 @@ import Button from '@material-ui/core/Button';
 import { withRouter } from 'react-router'
 
 const useStyles = makeStyles({
-    root: {
-        flexGrow: 1
-    },
     parentGrid: {
         height: '30vh'
-    },
-    profileGrid: {
-        height: '100vh',
-    },
-
+    }
 });
 
 const Profile = (props) => {
     const classes = useStyles();
+    const [disabled, setDisabled] = React.useState(true)
+
+    const changeDisabled = () => {
+        setDisabled(prevState => !prevState)
+    }
 
     return (
         <>
@@ -36,12 +34,12 @@ const Profile = (props) => {
                     <Grid container spacing={6} justifyContent='center'>
                         <Grid item xs={6}>
                             <div style={{ marginLeft: 40 }}>
-                                <TextField fullWidth disabled id="txtFicha" label="Ficha" defaultValue="#####" />
+                                <TextField fullWidth disabled={disabled} id="txtFicha" label="Ficha" defaultValue="#####" />
                             </div>
                         </Grid>
                         <Grid item xs={6}>
                             <div>
-                                <TextField fullWidth disabled id="txtCorreo" label="Correo electrónico" defaultValue="user@dominio.com" />
+                                <TextField fullWidth disabled={disabled} id="txtCorreo" label="Correo electrónico" defaultValue="user@dominio.com" />
                             </div>
                         </Grid>
                     </Grid>
@@ -49,17 +47,17 @@ const Profile = (props) => {
                     <Grid container spacing={6} justifyContent='center'>
                         <Grid item xs={6}>
                             <div style={{ marginLeft: 40 }}>
-                                <TextField fullWidth disabled id="txtNombre" label="Nombre Completo" defaultValue="Nombre Apellido1 Apellido2" />
+                                <TextField fullWidth disabled={disabled} id="txtNombre" label="Nombre Completo" defaultValue="Nombre Apellido1 Apellido2" />
                             </div>
                         </Grid>
                         <Grid item xs={6}>
                             <div>
-                                <TextField fullWidth disabled id="txtContraseña" label="Contraseña" defaultValue="**********" />
+                                <TextField fullWidth disabled={disabled} id="txtContraseña" label="Contraseña" defaultValue="**********" />
                             </div>
                         </Grid>
                     </Grid>
                     <div style={{ marginTop: 70 }} align="right">
-                        <Button variant="contained" color="primary" type="submit" value="Submit">
+                        <Button onClick={changeDisabled} variant="contained" color="primary">
                             Editar Información
                         </Button>
                     </div>
