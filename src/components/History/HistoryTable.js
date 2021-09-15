@@ -49,9 +49,9 @@ const HistoryTable = () => {
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell style={{ color: '#3f51b5' }}>Folio</TableCell>
-            <TableCell style={{ color: '#3f51b5' }}>Fecha</TableCell>
-            <TableCell style={{ color: '#3f51b5' }}>Resultado</TableCell>
+            <TableCell style={{ fontWeight: 'bold', color: '#3f51b5' }}>Folio</TableCell>
+            <TableCell style={{ fontWeight: 'bold', color: '#3f51b5' }}>Fecha</TableCell>
+            <TableCell style={{ fontWeight: 'bold', color: '#3f51b5' }}>Resultado</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

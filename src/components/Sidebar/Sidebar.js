@@ -77,7 +77,7 @@ const Sidebar = (props) => {
       <div style={{ display: 'flex', justifyContent: 'center', height: 150 }}>
         <div>
           <PersonIcon style={{ fontSize: '100px' }} />
-          <Typography>
+          <Typography style={{ fontWeight: 'bold' }}>
             Nombre Apellido
           </Typography>
         </div>
