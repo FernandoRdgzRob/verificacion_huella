@@ -1,0 +1,14 @@
+type Fingerprint {
+  id: ID! @id
+  type: String!
+  side: String!
+}
+
+type Comparison {
+  id: ID! @id
+  firstFingerprint: Fingerprint!  @relation(name: "FirstFingerprint")
+  secondFingerprint: Fingerprint! @relation(name: "SecondFingerprint")
+  match: Boolean!
+  coincidence: Int!
+  timestamp: DateTime!
+}

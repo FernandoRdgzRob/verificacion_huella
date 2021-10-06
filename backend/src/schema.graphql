@@ -1,0 +1,24 @@
+scalar DateTime
+
+type Query {
+  getAllFingerprints: [Fingerprint!]!
+}
+
+type Mutation {
+  createFingerprint(type: String!, side: String!): Fingerprint!
+}
+
+type Fingerprint {
+  id: ID!
+  type: String!
+  side: String!
+}
+
+type Comparison {
+  id: ID!
+  firstFingerprint: Fingerprint!
+  secondFingerprint: Fingerprint!
+  match: Boolean!
+  coincidence: Float!
+  timestamp: DateTime!
+}
