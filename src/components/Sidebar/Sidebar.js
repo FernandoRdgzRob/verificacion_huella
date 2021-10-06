@@ -10,6 +10,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import FingerprintIcon from '@material-ui/icons/Fingerprint'
+import PeopleIcon from '@material-ui/icons/People'
 import HistoryIcon from '@material-ui/icons/History'
 import { Link } from 'react-router-dom'
 import PersonIcon from '@material-ui/icons/Person'
@@ -72,8 +73,13 @@ const Sidebar = (props) => {
     },
     {
       name: 'Perfil',
-      icon: <HistoryIcon style={{ color: '#ffffff' }} />,
+      icon: <PersonIcon style={{ color: '#ffffff' }} />,
       route: '/Profile'
+    },
+    {
+      name: 'Control de usuarios',
+      icon: <PeopleIcon style={{ color: '#ffffff' }} />,
+      route: '/admin'
     }
   ]
 

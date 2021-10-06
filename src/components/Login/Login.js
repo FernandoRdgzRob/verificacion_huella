@@ -72,7 +72,7 @@ const Login = (props) => {
         <div style={{ marginBottom: 15 }}>
           <Typography component='h1' variant='h4'>Iniciar sesión</Typography>
           <Typography style={{ color: 'gray' }} variant='body2'>
-            ¿No tienes una cuenta? <Link to='/solicitar-acceso'>Solicita acceso</Link>
+            ¿No tienes una cuenta? <Link to='/'>Solicita acceso</Link>
           </Typography>
         </div>
         <CustomForm

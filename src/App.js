@@ -10,6 +10,7 @@ import Verification from './components/Verification/Verification'
 import { makeStyles } from '@material-ui/core/styles'
 import Sidebar from './components/Sidebar/Sidebar'
 import History from './components/History/History'
+import Admin from './components/Admin/Admin'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,6 +37,11 @@ const routes = [
     path: '/Profile',
     sidebar: () => <Sidebar />,
     main: () => <Profile />
+  },
+  {
+    path: '/admin',
+    sidebar: () => <Sidebar />,
+    main: () => <Admin />
   }
 ]
 
