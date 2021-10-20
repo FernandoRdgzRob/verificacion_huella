@@ -10,6 +10,7 @@ import { Link, useHistory } from 'react-router-dom'
 // Utils
 import { emailRegex } from './emailRegex'
 import { CustomForm, useCustomForm } from '../Utils/CustomForm'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 
 const useStyles = makeStyles({
   parentGrid: {
@@ -30,6 +31,14 @@ const useStyles = makeStyles({
     alignItems: 'center',
     marginLeft: '-3%',
     paddingTop: '11%'
+  },
+  responsiveLoginGrid: {
+    borderRadius: 10,
+    paddingLeft: '8.5%',
+    paddingRight: '8.5%',
+    paddingTop: '8.5%',
+    paddingBottom: '8.5%',
+    backgroundColor: '#F8F8F8'
   }
 })
 
@@ -37,6 +46,7 @@ const Login = (props) => {
   const classes = useStyles()
   const history = useHistory()
   const { formFunctions, handleSubmit } = useCustomForm()
+  const matches = useMediaQuery('(min-width:600px)')
 
   const form = {
     fields: [
@@ -68,7 +78,7 @@ const Login = (props) => {
 
   return (
     <Grid className={classes.parentGrid} container alignItems='center' justifyContent='center'>
-      <Grid className={classes.loginGrid} item xs={10} md={4}>
+      <Grid className={matches ? classes.loginGrid : classes.responsiveLoginGrid} item xs={10} md={4}>
         <div style={{ marginBottom: 15 }}>
           <Typography component='h1' variant='h4'>Iniciar sesión</Typography>
           <Typography style={{ color: 'gray' }} variant='body2'>
@@ -81,9 +91,10 @@ const Login = (props) => {
           onSubmit={onSubmit}
         />
       </Grid>
-      <Grid className={classes.loginImage} item xs={10} md={5} justifyContent='center'>
-        <img width='425' src={loginPicture} alt='Detección de huellas' />
-      </Grid>
+      {matches &&
+        <Grid className={classes.loginImage} item xs={10} md={5} justifyContent='center'>
+          <img width='425' src={loginPicture} alt='Detección de huellas' />
+        </Grid>}
     </Grid>
   )
 }

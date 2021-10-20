@@ -7,13 +7,14 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
-import { Typography } from '@material-ui/core'
+import { IconButton, Typography } from '@material-ui/core'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import FingerprintIcon from '@material-ui/icons/Fingerprint'
 import PeopleIcon from '@material-ui/icons/People'
 import HistoryIcon from '@material-ui/icons/History'
 import { Link } from 'react-router-dom'
 import PersonIcon from '@material-ui/icons/Person'
+import MenuIcon from '@material-ui/icons/Menu'
 
 const drawerWidth = 240
 
@@ -121,6 +122,11 @@ const Sidebar = (props) => {
   return (
     <div>
       <nav className={classes.drawer} aria-label='mailbox folders'>
+        <div style={{ height: '0px', width: '0px', marginTop: '5px', boxSizing: 'border-box' }}>
+          <IconButton onClick={handleDrawerToggle}>
+            <MenuIcon />
+          </IconButton>
+        </div>
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation='css'>
           <Drawer
