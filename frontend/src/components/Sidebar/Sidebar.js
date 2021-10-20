@@ -74,7 +74,7 @@ const Sidebar = (props) => {
     {
       name: 'Perfil',
       icon: <PersonIcon style={{ color: '#ffffff' }} />,
-      route: '/Profile'
+      route: '/perfil'
     },
     {
       name: 'Control de usuarios',

@@ -9,7 +9,11 @@ var models = [
     embedded: false
   },
   {
-    name: "Comparison",
+    name: "Verification",
+    embedded: false
+  },
+  {
+    name: "User",
     embedded: false
   }
 ];

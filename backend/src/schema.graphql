@@ -1,11 +1,14 @@
+# Type definitions
 scalar DateTime
 
 type Query {
-  getAllFingerprints: [Fingerprint!]!
+  getAllVerifications: [VerificationPayload!]!
 }
 
 type Mutation {
-  createFingerprint(type: String!, side: String!): Fingerprint!
+  createVerification(input: CreateVerificationInput!): VerificationPayload!
+  signUp(input: SignUpInput!): AuthPayload!
+  logIn(input: LogInInput!): AuthPayload!
 }
 
 type Fingerprint {
@@ -14,11 +17,55 @@ type Fingerprint {
   side: String!
 }
 
-type Comparison {
+type User {
+  id: ID!
+  email: String!
+  name: String
+  history: [Verification!]!
+}
+
+type Verification {
   id: ID!
   firstFingerprint: Fingerprint!
   secondFingerprint: Fingerprint!
   match: Boolean!
   coincidence: Float!
-  timestamp: DateTime!
+  createdAt: DateTime!
+}
+
+# Payloads
+type VerificationPayload {
+  id: ID!
+  firstFingerprint: Fingerprint!
+  secondFingerprint: Fingerprint!
+  match: Boolean!
+  coincidence: Float!
+  createdAt: DateTime!
+}
+
+type AuthPayload {
+  token: String!
+  user: User!
+}
+
+# Inputs
+input CreateVerificationInput {
+  firstFingerprint: FingerprintInput!
+  secondFingerprint: FingerprintInput!
+}
+
+input FingerprintInput {
+  type: String!
+  side: String!
+}
+
+input SignUpInput {
+  email: String!
+  password: String!
+  name: String
+}
+
+input LogInInput {
+  email: String!
+  password: String!
 }

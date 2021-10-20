@@ -4,6 +4,7 @@ const { readFileSync } = require('fs')
 const path = require('path')
 const { prisma } = require('./generated/prisma-client')
 const { resolvers } = require('./resolvers')
+const { permissions } = require('./permissions')
 
 const server = new ApolloServer({
   typeDefs: readFileSync(
@@ -11,6 +12,7 @@ const server = new ApolloServer({
     'utf8'
   ),
   resolvers,
+  // middlewares: [permissions],
   context: {
     prisma
   }
