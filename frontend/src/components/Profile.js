@@ -32,12 +32,12 @@ const Profile = (props) => {
             </div>
           </Grid>
           <Grid container spacing={6} justifyContent='center'>
-            <Grid item xs={6}>
-              <div style={{ marginLeft: 40 }}>
+            <Grid item xs={12} sm={6}>
+              <div>
                 <TextField fullWidth disabled={disabled} id='txtFicha' label='Ficha' defaultValue='#####' />
               </div>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} sm={6}>
               <div>
                 <TextField fullWidth disabled={disabled} id='txtCorreo' label='Correo electrónico' defaultValue='user@dominio.com' />
               </div>
@@ -45,12 +45,12 @@ const Profile = (props) => {
           </Grid>
 
           <Grid container spacing={6} justifyContent='center'>
-            <Grid item xs={6}>
-              <div style={{ marginLeft: 40 }}>
+            <Grid item xs={12} sm={6}>
+              <div>
                 <TextField fullWidth disabled={disabled} id='txtNombre' label='Nombre Completo' defaultValue='Nombre Apellido1 Apellido2' />
               </div>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} sm={6}>
               <div>
                 <TextField fullWidth disabled={disabled} id='txtContraseña' label='Contraseña' defaultValue='**********' />
               </div>
