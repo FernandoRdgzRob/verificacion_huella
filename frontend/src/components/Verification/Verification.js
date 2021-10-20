@@ -2,7 +2,7 @@ import React from 'react'
 // React Router
 import { withRouter } from 'react-router'
 // Material UI
-import { Button, Container, Grid } from '@material-ui/core'
+import { Button, Container, Grid, Typography } from '@material-ui/core'
 // Utils
 import VerificationForm from './VerificationForm'
 
@@ -84,16 +84,16 @@ const Verification = () => {
       file: fileTwo
     }
 
-    console.log(valid)
-    console.log(fingerprintOne)
-    console.log(fingerprintTwo)
+    console.log({ valid, fingerprintOne, fingerprintTwo })
   }
 
   return (
 
     <Container maxWidth='md' style={{ marginTop: 30 }}>
+      <Typography style={{ marginBottom: 15 }} component='h1' variant='h4'>Verificación</Typography>
       <Grid container spacing={10}>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
+          <Typography style={{ marginBottom: 10 }} component='h2' variant='h6'>Huella 1</Typography>
           <VerificationForm
             fingerprintLocation={fingerprintLocationOne}
             setFingerprintLocation={setFingerprintLocationOne}
@@ -108,7 +108,8 @@ const Verification = () => {
             imageError={imageErrorOne}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
+          <Typography style={{ marginBottom: 10 }} component='h2' variant='h6'>Huella 2</Typography>
           <VerificationForm
             fingerprintLocation={fingerprintLocationTwo}
             setFingerprintLocation={setFingerprintLocationTwo}
@@ -123,13 +124,8 @@ const Verification = () => {
             imageError={imageErrorTwo}
           />
         </Grid>
-        <Grid item xs={3}>
-          <Button
-            fullWidth
-            color='primary'
-            onClick={onSubmit}
-            variant='contained'
-          >
+        <Grid item xs={6} md={3}>
+          <Button fullWidth color='primary' onClick={onSubmit} variant='contained'>
             Verificar
           </Button>
         </Grid>

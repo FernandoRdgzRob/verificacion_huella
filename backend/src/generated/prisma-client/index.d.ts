@@ -16,8 +16,9 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
-  comparison: (where?: ComparisonWhereInput) => Promise<boolean>;
   fingerprint: (where?: FingerprintWhereInput) => Promise<boolean>;
+  user: (where?: UserWhereInput) => Promise<boolean>;
+  verification: (where?: VerificationWhereInput) => Promise<boolean>;
 }
 
 export interface Node {}
@@ -39,25 +40,6 @@ export interface Prisma {
    * Queries
    */
 
-  comparison: (where: ComparisonWhereUniqueInput) => ComparisonNullablePromise;
-  comparisons: (args?: {
-    where?: ComparisonWhereInput;
-    orderBy?: ComparisonOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => FragmentableArray<Comparison>;
-  comparisonsConnection: (args?: {
-    where?: ComparisonWhereInput;
-    orderBy?: ComparisonOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => ComparisonConnectionPromise;
   fingerprint: (
     where: FingerprintWhereUniqueInput
   ) => FingerprintNullablePromise;
@@ -79,28 +61,52 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => FingerprintConnectionPromise;
+  user: (where: UserWhereUniqueInput) => UserNullablePromise;
+  users: (args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<User>;
+  usersConnection: (args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => UserConnectionPromise;
+  verification: (
+    where: VerificationWhereUniqueInput
+  ) => VerificationNullablePromise;
+  verifications: (args?: {
+    where?: VerificationWhereInput;
+    orderBy?: VerificationOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Verification>;
+  verificationsConnection: (args?: {
+    where?: VerificationWhereInput;
+    orderBy?: VerificationOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => VerificationConnectionPromise;
   node: (args: { id: ID_Output }) => Node;
 
   /**
    * Mutations
    */
 
-  createComparison: (data: ComparisonCreateInput) => ComparisonPromise;
-  updateComparison: (args: {
-    data: ComparisonUpdateInput;
-    where: ComparisonWhereUniqueInput;
-  }) => ComparisonPromise;
-  updateManyComparisons: (args: {
-    data: ComparisonUpdateManyMutationInput;
-    where?: ComparisonWhereInput;
-  }) => BatchPayloadPromise;
-  upsertComparison: (args: {
-    where: ComparisonWhereUniqueInput;
-    create: ComparisonCreateInput;
-    update: ComparisonUpdateInput;
-  }) => ComparisonPromise;
-  deleteComparison: (where: ComparisonWhereUniqueInput) => ComparisonPromise;
-  deleteManyComparisons: (where?: ComparisonWhereInput) => BatchPayloadPromise;
   createFingerprint: (data: FingerprintCreateInput) => FingerprintPromise;
   updateFingerprint: (args: {
     data: FingerprintUpdateInput;
@@ -119,6 +125,42 @@ export interface Prisma {
   deleteManyFingerprints: (
     where?: FingerprintWhereInput
   ) => BatchPayloadPromise;
+  createUser: (data: UserCreateInput) => UserPromise;
+  updateUser: (args: {
+    data: UserUpdateInput;
+    where: UserWhereUniqueInput;
+  }) => UserPromise;
+  updateManyUsers: (args: {
+    data: UserUpdateManyMutationInput;
+    where?: UserWhereInput;
+  }) => BatchPayloadPromise;
+  upsertUser: (args: {
+    where: UserWhereUniqueInput;
+    create: UserCreateInput;
+    update: UserUpdateInput;
+  }) => UserPromise;
+  deleteUser: (where: UserWhereUniqueInput) => UserPromise;
+  deleteManyUsers: (where?: UserWhereInput) => BatchPayloadPromise;
+  createVerification: (data: VerificationCreateInput) => VerificationPromise;
+  updateVerification: (args: {
+    data: VerificationUpdateInput;
+    where: VerificationWhereUniqueInput;
+  }) => VerificationPromise;
+  updateManyVerifications: (args: {
+    data: VerificationUpdateManyMutationInput;
+    where?: VerificationWhereInput;
+  }) => BatchPayloadPromise;
+  upsertVerification: (args: {
+    where: VerificationWhereUniqueInput;
+    create: VerificationCreateInput;
+    update: VerificationUpdateInput;
+  }) => VerificationPromise;
+  deleteVerification: (
+    where: VerificationWhereUniqueInput
+  ) => VerificationPromise;
+  deleteManyVerifications: (
+    where?: VerificationWhereInput
+  ) => BatchPayloadPromise;
 
   /**
    * Subscriptions
@@ -128,12 +170,15 @@ export interface Prisma {
 }
 
 export interface Subscription {
-  comparison: (
-    where?: ComparisonSubscriptionWhereInput
-  ) => ComparisonSubscriptionPayloadSubscription;
   fingerprint: (
     where?: FingerprintSubscriptionWhereInput
   ) => FingerprintSubscriptionPayloadSubscription;
+  user: (
+    where?: UserSubscriptionWhereInput
+  ) => UserSubscriptionPayloadSubscription;
+  verification: (
+    where?: VerificationSubscriptionWhereInput
+  ) => VerificationSubscriptionPayloadSubscription;
 }
 
 export interface ClientConstructor<T> {
@@ -152,61 +197,35 @@ export type FingerprintOrderByInput =
   | "side_ASC"
   | "side_DESC";
 
-export type MutationType = "CREATED" | "UPDATED" | "DELETED";
+export type UserOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "email_ASC"
+  | "email_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "lastname_ASC"
+  | "lastname_DESC"
+  | "password_ASC"
+  | "password_DESC"
+  | "isAdmin_ASC"
+  | "isAdmin_DESC";
 
-export type ComparisonOrderByInput =
+export type VerificationOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "match_ASC"
   | "match_DESC"
   | "coincidence_ASC"
   | "coincidence_DESC"
-  | "timestamp_ASC"
-  | "timestamp_DESC";
+  | "createdAt_ASC"
+  | "createdAt_DESC";
 
-export interface ComparisonCreateInput {
-  id?: Maybe<ID_Input>;
-  firstFingerprint: FingerprintCreateOneInput;
-  secondFingerprint: FingerprintCreateOneInput;
-  match: Boolean;
-  coincidence: Int;
-  timestamp: DateTimeInput;
-}
+export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export interface FingerprintUpdateDataInput {
-  type?: Maybe<String>;
-  side?: Maybe<String>;
-}
-
-export type ComparisonWhereUniqueInput = AtLeastOne<{
+export type FingerprintWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
-
-export interface FingerprintUpdateOneRequiredInput {
-  create?: Maybe<FingerprintCreateInput>;
-  update?: Maybe<FingerprintUpdateDataInput>;
-  upsert?: Maybe<FingerprintUpsertNestedInput>;
-  connect?: Maybe<FingerprintWhereUniqueInput>;
-}
-
-export interface FingerprintUpdateManyMutationInput {
-  type?: Maybe<String>;
-  side?: Maybe<String>;
-}
-
-export interface ComparisonUpdateInput {
-  firstFingerprint?: Maybe<FingerprintUpdateOneRequiredInput>;
-  secondFingerprint?: Maybe<FingerprintUpdateOneRequiredInput>;
-  match?: Maybe<Boolean>;
-  coincidence?: Maybe<Int>;
-  timestamp?: Maybe<DateTimeInput>;
-}
-
-export interface ComparisonUpdateManyMutationInput {
-  match?: Maybe<Boolean>;
-  coincidence?: Maybe<Int>;
-  timestamp?: Maybe<DateTimeInput>;
-}
 
 export interface FingerprintWhereInput {
   id?: Maybe<ID_Input>;
@@ -256,9 +275,131 @@ export interface FingerprintWhereInput {
   NOT?: Maybe<FingerprintWhereInput[] | FingerprintWhereInput>;
 }
 
-export interface FingerprintCreateOneInput {
-  create?: Maybe<FingerprintCreateInput>;
-  connect?: Maybe<FingerprintWhereUniqueInput>;
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export interface UserWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  email?: Maybe<String>;
+  email_not?: Maybe<String>;
+  email_in?: Maybe<String[] | String>;
+  email_not_in?: Maybe<String[] | String>;
+  email_lt?: Maybe<String>;
+  email_lte?: Maybe<String>;
+  email_gt?: Maybe<String>;
+  email_gte?: Maybe<String>;
+  email_contains?: Maybe<String>;
+  email_not_contains?: Maybe<String>;
+  email_starts_with?: Maybe<String>;
+  email_not_starts_with?: Maybe<String>;
+  email_ends_with?: Maybe<String>;
+  email_not_ends_with?: Maybe<String>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  lastname?: Maybe<String>;
+  lastname_not?: Maybe<String>;
+  lastname_in?: Maybe<String[] | String>;
+  lastname_not_in?: Maybe<String[] | String>;
+  lastname_lt?: Maybe<String>;
+  lastname_lte?: Maybe<String>;
+  lastname_gt?: Maybe<String>;
+  lastname_gte?: Maybe<String>;
+  lastname_contains?: Maybe<String>;
+  lastname_not_contains?: Maybe<String>;
+  lastname_starts_with?: Maybe<String>;
+  lastname_not_starts_with?: Maybe<String>;
+  lastname_ends_with?: Maybe<String>;
+  lastname_not_ends_with?: Maybe<String>;
+  password?: Maybe<String>;
+  password_not?: Maybe<String>;
+  password_in?: Maybe<String[] | String>;
+  password_not_in?: Maybe<String[] | String>;
+  password_lt?: Maybe<String>;
+  password_lte?: Maybe<String>;
+  password_gt?: Maybe<String>;
+  password_gte?: Maybe<String>;
+  password_contains?: Maybe<String>;
+  password_not_contains?: Maybe<String>;
+  password_starts_with?: Maybe<String>;
+  password_not_starts_with?: Maybe<String>;
+  password_ends_with?: Maybe<String>;
+  password_not_ends_with?: Maybe<String>;
+  isAdmin?: Maybe<Boolean>;
+  isAdmin_not?: Maybe<Boolean>;
+  AND?: Maybe<UserWhereInput[] | UserWhereInput>;
+  OR?: Maybe<UserWhereInput[] | UserWhereInput>;
+  NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
+}
+
+export type VerificationWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export interface VerificationWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  fingerprintA?: Maybe<FingerprintWhereInput>;
+  fingerprintB?: Maybe<FingerprintWhereInput>;
+  match?: Maybe<Boolean>;
+  match_not?: Maybe<Boolean>;
+  coincidence?: Maybe<Int>;
+  coincidence_not?: Maybe<Int>;
+  coincidence_in?: Maybe<Int[] | Int>;
+  coincidence_not_in?: Maybe<Int[] | Int>;
+  coincidence_lt?: Maybe<Int>;
+  coincidence_lte?: Maybe<Int>;
+  coincidence_gt?: Maybe<Int>;
+  coincidence_gte?: Maybe<Int>;
+  createdBy?: Maybe<UserWhereInput>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<VerificationWhereInput[] | VerificationWhereInput>;
+  OR?: Maybe<VerificationWhereInput[] | VerificationWhereInput>;
+  NOT?: Maybe<VerificationWhereInput[] | VerificationWhereInput>;
 }
 
 export interface FingerprintCreateInput {
@@ -267,26 +408,109 @@ export interface FingerprintCreateInput {
   side: String;
 }
 
-export interface ComparisonSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<ComparisonWhereInput>;
-  AND?: Maybe<
-    ComparisonSubscriptionWhereInput[] | ComparisonSubscriptionWhereInput
-  >;
-  OR?: Maybe<
-    ComparisonSubscriptionWhereInput[] | ComparisonSubscriptionWhereInput
-  >;
-  NOT?: Maybe<
-    ComparisonSubscriptionWhereInput[] | ComparisonSubscriptionWhereInput
-  >;
+export interface FingerprintUpdateInput {
+  type?: Maybe<String>;
+  side?: Maybe<String>;
 }
 
-export type FingerprintWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
+export interface FingerprintUpdateManyMutationInput {
+  type?: Maybe<String>;
+  side?: Maybe<String>;
+}
+
+export interface UserCreateInput {
+  id?: Maybe<ID_Input>;
+  email: String;
+  name?: Maybe<String>;
+  lastname?: Maybe<String>;
+  password: String;
+  isAdmin: Boolean;
+}
+
+export interface UserUpdateInput {
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  lastname?: Maybe<String>;
+  password?: Maybe<String>;
+  isAdmin?: Maybe<Boolean>;
+}
+
+export interface UserUpdateManyMutationInput {
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  lastname?: Maybe<String>;
+  password?: Maybe<String>;
+  isAdmin?: Maybe<Boolean>;
+}
+
+export interface VerificationCreateInput {
+  id?: Maybe<ID_Input>;
+  fingerprintA: FingerprintCreateOneInput;
+  fingerprintB: FingerprintCreateOneInput;
+  match: Boolean;
+  coincidence: Int;
+  createdBy: UserCreateOneInput;
+}
+
+export interface FingerprintCreateOneInput {
+  create?: Maybe<FingerprintCreateInput>;
+  connect?: Maybe<FingerprintWhereUniqueInput>;
+}
+
+export interface UserCreateOneInput {
+  create?: Maybe<UserCreateInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface VerificationUpdateInput {
+  fingerprintA?: Maybe<FingerprintUpdateOneRequiredInput>;
+  fingerprintB?: Maybe<FingerprintUpdateOneRequiredInput>;
+  match?: Maybe<Boolean>;
+  coincidence?: Maybe<Int>;
+  createdBy?: Maybe<UserUpdateOneRequiredInput>;
+}
+
+export interface FingerprintUpdateOneRequiredInput {
+  create?: Maybe<FingerprintCreateInput>;
+  update?: Maybe<FingerprintUpdateDataInput>;
+  upsert?: Maybe<FingerprintUpsertNestedInput>;
+  connect?: Maybe<FingerprintWhereUniqueInput>;
+}
+
+export interface FingerprintUpdateDataInput {
+  type?: Maybe<String>;
+  side?: Maybe<String>;
+}
+
+export interface FingerprintUpsertNestedInput {
+  update: FingerprintUpdateDataInput;
+  create: FingerprintCreateInput;
+}
+
+export interface UserUpdateOneRequiredInput {
+  create?: Maybe<UserCreateInput>;
+  update?: Maybe<UserUpdateDataInput>;
+  upsert?: Maybe<UserUpsertNestedInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserUpdateDataInput {
+  email?: Maybe<String>;
+  name?: Maybe<String>;
+  lastname?: Maybe<String>;
+  password?: Maybe<String>;
+  isAdmin?: Maybe<Boolean>;
+}
+
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
+export interface VerificationUpdateManyMutationInput {
+  match?: Maybe<Boolean>;
+  coincidence?: Maybe<Int>;
+}
 
 export interface FingerprintSubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
@@ -305,83 +529,36 @@ export interface FingerprintSubscriptionWhereInput {
   >;
 }
 
-export interface ComparisonWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  firstFingerprint?: Maybe<FingerprintWhereInput>;
-  secondFingerprint?: Maybe<FingerprintWhereInput>;
-  match?: Maybe<Boolean>;
-  match_not?: Maybe<Boolean>;
-  coincidence?: Maybe<Int>;
-  coincidence_not?: Maybe<Int>;
-  coincidence_in?: Maybe<Int[] | Int>;
-  coincidence_not_in?: Maybe<Int[] | Int>;
-  coincidence_lt?: Maybe<Int>;
-  coincidence_lte?: Maybe<Int>;
-  coincidence_gt?: Maybe<Int>;
-  coincidence_gte?: Maybe<Int>;
-  timestamp?: Maybe<DateTimeInput>;
-  timestamp_not?: Maybe<DateTimeInput>;
-  timestamp_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  timestamp_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  timestamp_lt?: Maybe<DateTimeInput>;
-  timestamp_lte?: Maybe<DateTimeInput>;
-  timestamp_gt?: Maybe<DateTimeInput>;
-  timestamp_gte?: Maybe<DateTimeInput>;
-  AND?: Maybe<ComparisonWhereInput[] | ComparisonWhereInput>;
-  OR?: Maybe<ComparisonWhereInput[] | ComparisonWhereInput>;
-  NOT?: Maybe<ComparisonWhereInput[] | ComparisonWhereInput>;
+export interface UserSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<UserWhereInput>;
+  AND?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+  OR?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+  NOT?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
 }
 
-export interface FingerprintUpdateInput {
-  type?: Maybe<String>;
-  side?: Maybe<String>;
-}
-
-export interface FingerprintUpsertNestedInput {
-  update: FingerprintUpdateDataInput;
-  create: FingerprintCreateInput;
+export interface VerificationSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<VerificationWhereInput>;
+  AND?: Maybe<
+    VerificationSubscriptionWhereInput[] | VerificationSubscriptionWhereInput
+  >;
+  OR?: Maybe<
+    VerificationSubscriptionWhereInput[] | VerificationSubscriptionWhereInput
+  >;
+  NOT?: Maybe<
+    VerificationSubscriptionWhereInput[] | VerificationSubscriptionWhereInput
+  >;
 }
 
 export interface NodeNode {
   id: ID_Output;
-}
-
-export interface FingerprintSubscriptionPayload {
-  mutation: MutationType;
-  node: Fingerprint;
-  updatedFields: String[];
-  previousValues: FingerprintPreviousValues;
-}
-
-export interface FingerprintSubscriptionPayloadPromise
-  extends Promise<FingerprintSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = FingerprintPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = FingerprintPreviousValuesPromise>() => T;
-}
-
-export interface FingerprintSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<FingerprintSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = FingerprintSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = FingerprintPreviousValuesSubscription>() => T;
 }
 
 export interface Fingerprint {
@@ -412,44 +589,6 @@ export interface FingerprintNullablePromise
   side: () => Promise<String>;
 }
 
-export interface BatchPayload {
-  count: Long;
-}
-
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
-    Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
-}
-
-export interface FingerprintPreviousValues {
-  id: ID_Output;
-  type: String;
-  side: String;
-}
-
-export interface FingerprintPreviousValuesPromise
-  extends Promise<FingerprintPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  type: () => Promise<String>;
-  side: () => Promise<String>;
-}
-
-export interface FingerprintPreviousValuesSubscription
-  extends Promise<AsyncIterator<FingerprintPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  type: () => Promise<AsyncIterator<String>>;
-  side: () => Promise<AsyncIterator<String>>;
-}
-
 export interface FingerprintConnection {
   pageInfo: PageInfo;
   edges: FingerprintEdge[];
@@ -469,166 +608,6 @@ export interface FingerprintConnectionSubscription
   pageInfo: <T = PageInfoSubscription>() => T;
   edges: <T = Promise<AsyncIterator<FingerprintEdgeSubscription>>>() => T;
   aggregate: <T = AggregateFingerprintSubscription>() => T;
-}
-
-export interface ComparisonSubscriptionPayload {
-  mutation: MutationType;
-  node: Comparison;
-  updatedFields: String[];
-  previousValues: ComparisonPreviousValues;
-}
-
-export interface ComparisonSubscriptionPayloadPromise
-  extends Promise<ComparisonSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = ComparisonPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = ComparisonPreviousValuesPromise>() => T;
-}
-
-export interface ComparisonSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<ComparisonSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = ComparisonSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = ComparisonPreviousValuesSubscription>() => T;
-}
-
-export interface ComparisonPreviousValues {
-  id: ID_Output;
-  match: Boolean;
-  coincidence: Int;
-  timestamp: DateTimeOutput;
-}
-
-export interface ComparisonPreviousValuesPromise
-  extends Promise<ComparisonPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  match: () => Promise<Boolean>;
-  coincidence: () => Promise<Int>;
-  timestamp: () => Promise<DateTimeOutput>;
-}
-
-export interface ComparisonPreviousValuesSubscription
-  extends Promise<AsyncIterator<ComparisonPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  match: () => Promise<AsyncIterator<Boolean>>;
-  coincidence: () => Promise<AsyncIterator<Int>>;
-  timestamp: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface Comparison {
-  id: ID_Output;
-  match: Boolean;
-  coincidence: Int;
-  timestamp: DateTimeOutput;
-}
-
-export interface ComparisonPromise extends Promise<Comparison>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  firstFingerprint: <T = FingerprintPromise>() => T;
-  secondFingerprint: <T = FingerprintPromise>() => T;
-  match: () => Promise<Boolean>;
-  coincidence: () => Promise<Int>;
-  timestamp: () => Promise<DateTimeOutput>;
-}
-
-export interface ComparisonSubscription
-  extends Promise<AsyncIterator<Comparison>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  firstFingerprint: <T = FingerprintSubscription>() => T;
-  secondFingerprint: <T = FingerprintSubscription>() => T;
-  match: () => Promise<AsyncIterator<Boolean>>;
-  coincidence: () => Promise<AsyncIterator<Int>>;
-  timestamp: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface ComparisonNullablePromise
-  extends Promise<Comparison | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  firstFingerprint: <T = FingerprintPromise>() => T;
-  secondFingerprint: <T = FingerprintPromise>() => T;
-  match: () => Promise<Boolean>;
-  coincidence: () => Promise<Int>;
-  timestamp: () => Promise<DateTimeOutput>;
-}
-
-export interface AggregateFingerprint {
-  count: Int;
-}
-
-export interface AggregateFingerprintPromise
-  extends Promise<AggregateFingerprint>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateFingerprintSubscription
-  extends Promise<AsyncIterator<AggregateFingerprint>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface AggregateComparison {
-  count: Int;
-}
-
-export interface AggregateComparisonPromise
-  extends Promise<AggregateComparison>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateComparisonSubscription
-  extends Promise<AsyncIterator<AggregateComparison>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface FingerprintEdge {
-  node: Fingerprint;
-  cursor: String;
-}
-
-export interface FingerprintEdgePromise
-  extends Promise<FingerprintEdge>,
-    Fragmentable {
-  node: <T = FingerprintPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface FingerprintEdgeSubscription
-  extends Promise<AsyncIterator<FingerprintEdge>>,
-    Fragmentable {
-  node: <T = FingerprintSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface ComparisonConnection {
-  pageInfo: PageInfo;
-  edges: ComparisonEdge[];
-}
-
-export interface ComparisonConnectionPromise
-  extends Promise<ComparisonConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<ComparisonEdge>>() => T;
-  aggregate: <T = AggregateComparisonPromise>() => T;
-}
-
-export interface ComparisonConnectionSubscription
-  extends Promise<AsyncIterator<ComparisonConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<ComparisonEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateComparisonSubscription>() => T;
 }
 
 export interface PageInfo {
@@ -654,26 +633,402 @@ export interface PageInfoSubscription
   endCursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface ComparisonEdge {
-  node: Comparison;
+export interface FingerprintEdge {
+  node: Fingerprint;
   cursor: String;
 }
 
-export interface ComparisonEdgePromise
-  extends Promise<ComparisonEdge>,
+export interface FingerprintEdgePromise
+  extends Promise<FingerprintEdge>,
     Fragmentable {
-  node: <T = ComparisonPromise>() => T;
+  node: <T = FingerprintPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface ComparisonEdgeSubscription
-  extends Promise<AsyncIterator<ComparisonEdge>>,
+export interface FingerprintEdgeSubscription
+  extends Promise<AsyncIterator<FingerprintEdge>>,
     Fragmentable {
-  node: <T = ComparisonSubscription>() => T;
+  node: <T = FingerprintSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export type Long = string;
+export interface AggregateFingerprint {
+  count: Int;
+}
+
+export interface AggregateFingerprintPromise
+  extends Promise<AggregateFingerprint>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateFingerprintSubscription
+  extends Promise<AsyncIterator<AggregateFingerprint>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface User {
+  id: ID_Output;
+  email: String;
+  name?: String;
+  lastname?: String;
+  password: String;
+  isAdmin: Boolean;
+}
+
+export interface UserPromise extends Promise<User>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  email: () => Promise<String>;
+  name: () => Promise<String>;
+  lastname: () => Promise<String>;
+  password: () => Promise<String>;
+  isAdmin: () => Promise<Boolean>;
+}
+
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  email: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  lastname: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  isAdmin: () => Promise<AsyncIterator<Boolean>>;
+}
+
+export interface UserNullablePromise
+  extends Promise<User | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  email: () => Promise<String>;
+  name: () => Promise<String>;
+  lastname: () => Promise<String>;
+  password: () => Promise<String>;
+  isAdmin: () => Promise<Boolean>;
+}
+
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
+export interface UserEdge {
+  node: User;
+  cursor: String;
+}
+
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateUser {
+  count: Int;
+}
+
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface Verification {
+  id: ID_Output;
+  match: Boolean;
+  coincidence: Int;
+  createdAt: DateTimeOutput;
+}
+
+export interface VerificationPromise
+  extends Promise<Verification>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  fingerprintA: <T = FingerprintPromise>() => T;
+  fingerprintB: <T = FingerprintPromise>() => T;
+  match: () => Promise<Boolean>;
+  coincidence: () => Promise<Int>;
+  createdBy: <T = UserPromise>() => T;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface VerificationSubscription
+  extends Promise<AsyncIterator<Verification>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  fingerprintA: <T = FingerprintSubscription>() => T;
+  fingerprintB: <T = FingerprintSubscription>() => T;
+  match: () => Promise<AsyncIterator<Boolean>>;
+  coincidence: () => Promise<AsyncIterator<Int>>;
+  createdBy: <T = UserSubscription>() => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface VerificationNullablePromise
+  extends Promise<Verification | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  fingerprintA: <T = FingerprintPromise>() => T;
+  fingerprintB: <T = FingerprintPromise>() => T;
+  match: () => Promise<Boolean>;
+  coincidence: () => Promise<Int>;
+  createdBy: <T = UserPromise>() => T;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface VerificationConnection {
+  pageInfo: PageInfo;
+  edges: VerificationEdge[];
+}
+
+export interface VerificationConnectionPromise
+  extends Promise<VerificationConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<VerificationEdge>>() => T;
+  aggregate: <T = AggregateVerificationPromise>() => T;
+}
+
+export interface VerificationConnectionSubscription
+  extends Promise<AsyncIterator<VerificationConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<VerificationEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateVerificationSubscription>() => T;
+}
+
+export interface VerificationEdge {
+  node: Verification;
+  cursor: String;
+}
+
+export interface VerificationEdgePromise
+  extends Promise<VerificationEdge>,
+    Fragmentable {
+  node: <T = VerificationPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface VerificationEdgeSubscription
+  extends Promise<AsyncIterator<VerificationEdge>>,
+    Fragmentable {
+  node: <T = VerificationSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateVerification {
+  count: Int;
+}
+
+export interface AggregateVerificationPromise
+  extends Promise<AggregateVerification>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateVerificationSubscription
+  extends Promise<AsyncIterator<AggregateVerification>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface FingerprintSubscriptionPayload {
+  mutation: MutationType;
+  node: Fingerprint;
+  updatedFields: String[];
+  previousValues: FingerprintPreviousValues;
+}
+
+export interface FingerprintSubscriptionPayloadPromise
+  extends Promise<FingerprintSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = FingerprintPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = FingerprintPreviousValuesPromise>() => T;
+}
+
+export interface FingerprintSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<FingerprintSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = FingerprintSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = FingerprintPreviousValuesSubscription>() => T;
+}
+
+export interface FingerprintPreviousValues {
+  id: ID_Output;
+  type: String;
+  side: String;
+}
+
+export interface FingerprintPreviousValuesPromise
+  extends Promise<FingerprintPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  type: () => Promise<String>;
+  side: () => Promise<String>;
+}
+
+export interface FingerprintPreviousValuesSubscription
+  extends Promise<AsyncIterator<FingerprintPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  type: () => Promise<AsyncIterator<String>>;
+  side: () => Promise<AsyncIterator<String>>;
+}
+
+export interface UserSubscriptionPayload {
+  mutation: MutationType;
+  node: User;
+  updatedFields: String[];
+  previousValues: UserPreviousValues;
+}
+
+export interface UserSubscriptionPayloadPromise
+  extends Promise<UserSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = UserPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserPreviousValuesPromise>() => T;
+}
+
+export interface UserSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserPreviousValuesSubscription>() => T;
+}
+
+export interface UserPreviousValues {
+  id: ID_Output;
+  email: String;
+  name?: String;
+  lastname?: String;
+  password: String;
+  isAdmin: Boolean;
+}
+
+export interface UserPreviousValuesPromise
+  extends Promise<UserPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  email: () => Promise<String>;
+  name: () => Promise<String>;
+  lastname: () => Promise<String>;
+  password: () => Promise<String>;
+  isAdmin: () => Promise<Boolean>;
+}
+
+export interface UserPreviousValuesSubscription
+  extends Promise<AsyncIterator<UserPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  email: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  lastname: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  isAdmin: () => Promise<AsyncIterator<Boolean>>;
+}
+
+export interface VerificationSubscriptionPayload {
+  mutation: MutationType;
+  node: Verification;
+  updatedFields: String[];
+  previousValues: VerificationPreviousValues;
+}
+
+export interface VerificationSubscriptionPayloadPromise
+  extends Promise<VerificationSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = VerificationPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = VerificationPreviousValuesPromise>() => T;
+}
+
+export interface VerificationSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<VerificationSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = VerificationSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = VerificationPreviousValuesSubscription>() => T;
+}
+
+export interface VerificationPreviousValues {
+  id: ID_Output;
+  match: Boolean;
+  coincidence: Int;
+  createdAt: DateTimeOutput;
+}
+
+export interface VerificationPreviousValuesPromise
+  extends Promise<VerificationPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  match: () => Promise<Boolean>;
+  coincidence: () => Promise<Int>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface VerificationPreviousValuesSubscription
+  extends Promise<AsyncIterator<VerificationPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  match: () => Promise<AsyncIterator<Boolean>>;
+  coincidence: () => Promise<AsyncIterator<Int>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -682,14 +1037,9 @@ export type ID_Input = string | number;
 export type ID_Output = string;
 
 /*
-DateTime scalar input type, allowing Date
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
-export type DateTimeInput = Date | string;
-
-/*
-DateTime scalar output type, which is always a string
-*/
-export type DateTimeOutput = string;
+export type String = string;
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
@@ -702,9 +1052,16 @@ The `Boolean` scalar type represents `true` or `false`.
 export type Boolean = boolean;
 
 /*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+DateTime scalar input type, allowing Date
 */
-export type String = string;
+export type DateTimeInput = Date | string;
+
+/*
+DateTime scalar output type, which is always a string
+*/
+export type DateTimeOutput = string;
+
+export type Long = string;
 
 /**
  * Model Metadata
@@ -716,7 +1073,11 @@ export const models: Model[] = [
     embedded: false
   },
   {
-    name: "Comparison",
+    name: "Verification",
+    embedded: false
+  },
+  {
+    name: "User",
     embedded: false
   }
 ];

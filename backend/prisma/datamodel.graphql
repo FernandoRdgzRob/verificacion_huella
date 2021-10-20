@@ -1,0 +1,24 @@
+type Fingerprint {
+  id: ID! @id
+  type: String!
+  side: String!
+}
+
+type Verification {
+  id: ID! @id
+  fingerprintA: Fingerprint!  @relation(name: "FingerprintA")
+  fingerprintB: Fingerprint! @relation(name: "FingerprintB")
+  match: Boolean!
+  coincidence: Int!
+  createdBy: User!
+  createdAt: DateTime! @createdAt
+}
+
+type User {
+  id: ID! @id
+  email: String!
+  name: String
+  lastname: String
+  password: String!
+  isAdmin: Boolean!
+}

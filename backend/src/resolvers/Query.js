@@ -1,6 +1,6 @@
 const Query = {
-  getAllFingerprints: async (parent, args, context) => {
-    return context.prisma.fingerprints()
+  getAllVerifications: async (parent, args, context) => {
+    return context.prisma.verifications()
   }
 }
 

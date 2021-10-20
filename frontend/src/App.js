@@ -34,7 +34,7 @@ const routes = [
     main: () => <History />
   },
   {
-    path: '/Profile',
+    path: '/perfil',
     sidebar: () => <Sidebar />,
     main: () => <Profile />
   },
@@ -80,9 +80,6 @@ function App () {
         <Route exact path='/'>
           <Login />
         </Route>
-        {/* <Route path='/Profile'>
-          <Profile />
-        </Route> */}
       </Switch>
     </Router>
   )

@@ -3,139 +3,20 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateComparison {
+/* GraphQL */ `type AggregateFingerprint {
   count: Int!
 }
 
-type AggregateFingerprint {
+type AggregateUser {
+  count: Int!
+}
+
+type AggregateVerification {
   count: Int!
 }
 
 type BatchPayload {
   count: Long!
-}
-
-type Comparison {
-  id: ID!
-  firstFingerprint: Fingerprint!
-  secondFingerprint: Fingerprint!
-  match: Boolean!
-  coincidence: Int!
-  timestamp: DateTime!
-}
-
-type ComparisonConnection {
-  pageInfo: PageInfo!
-  edges: [ComparisonEdge]!
-  aggregate: AggregateComparison!
-}
-
-input ComparisonCreateInput {
-  id: ID
-  firstFingerprint: FingerprintCreateOneInput!
-  secondFingerprint: FingerprintCreateOneInput!
-  match: Boolean!
-  coincidence: Int!
-  timestamp: DateTime!
-}
-
-type ComparisonEdge {
-  node: Comparison!
-  cursor: String!
-}
-
-enum ComparisonOrderByInput {
-  id_ASC
-  id_DESC
-  match_ASC
-  match_DESC
-  coincidence_ASC
-  coincidence_DESC
-  timestamp_ASC
-  timestamp_DESC
-}
-
-type ComparisonPreviousValues {
-  id: ID!
-  match: Boolean!
-  coincidence: Int!
-  timestamp: DateTime!
-}
-
-type ComparisonSubscriptionPayload {
-  mutation: MutationType!
-  node: Comparison
-  updatedFields: [String!]
-  previousValues: ComparisonPreviousValues
-}
-
-input ComparisonSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: ComparisonWhereInput
-  AND: [ComparisonSubscriptionWhereInput!]
-  OR: [ComparisonSubscriptionWhereInput!]
-  NOT: [ComparisonSubscriptionWhereInput!]
-}
-
-input ComparisonUpdateInput {
-  firstFingerprint: FingerprintUpdateOneRequiredInput
-  secondFingerprint: FingerprintUpdateOneRequiredInput
-  match: Boolean
-  coincidence: Int
-  timestamp: DateTime
-}
-
-input ComparisonUpdateManyMutationInput {
-  match: Boolean
-  coincidence: Int
-  timestamp: DateTime
-}
-
-input ComparisonWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  firstFingerprint: FingerprintWhereInput
-  secondFingerprint: FingerprintWhereInput
-  match: Boolean
-  match_not: Boolean
-  coincidence: Int
-  coincidence_not: Int
-  coincidence_in: [Int!]
-  coincidence_not_in: [Int!]
-  coincidence_lt: Int
-  coincidence_lte: Int
-  coincidence_gt: Int
-  coincidence_gte: Int
-  timestamp: DateTime
-  timestamp_not: DateTime
-  timestamp_in: [DateTime!]
-  timestamp_not_in: [DateTime!]
-  timestamp_lt: DateTime
-  timestamp_lte: DateTime
-  timestamp_gt: DateTime
-  timestamp_gte: DateTime
-  AND: [ComparisonWhereInput!]
-  OR: [ComparisonWhereInput!]
-  NOT: [ComparisonWhereInput!]
-}
-
-input ComparisonWhereUniqueInput {
-  id: ID
 }
 
 scalar DateTime
@@ -283,18 +164,24 @@ input FingerprintWhereUniqueInput {
 scalar Long
 
 type Mutation {
-  createComparison(data: ComparisonCreateInput!): Comparison!
-  updateComparison(data: ComparisonUpdateInput!, where: ComparisonWhereUniqueInput!): Comparison
-  updateManyComparisons(data: ComparisonUpdateManyMutationInput!, where: ComparisonWhereInput): BatchPayload!
-  upsertComparison(where: ComparisonWhereUniqueInput!, create: ComparisonCreateInput!, update: ComparisonUpdateInput!): Comparison!
-  deleteComparison(where: ComparisonWhereUniqueInput!): Comparison
-  deleteManyComparisons(where: ComparisonWhereInput): BatchPayload!
   createFingerprint(data: FingerprintCreateInput!): Fingerprint!
   updateFingerprint(data: FingerprintUpdateInput!, where: FingerprintWhereUniqueInput!): Fingerprint
   updateManyFingerprints(data: FingerprintUpdateManyMutationInput!, where: FingerprintWhereInput): BatchPayload!
   upsertFingerprint(where: FingerprintWhereUniqueInput!, create: FingerprintCreateInput!, update: FingerprintUpdateInput!): Fingerprint!
   deleteFingerprint(where: FingerprintWhereUniqueInput!): Fingerprint
   deleteManyFingerprints(where: FingerprintWhereInput): BatchPayload!
+  createUser(data: UserCreateInput!): User!
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  deleteUser(where: UserWhereUniqueInput!): User
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
+  createVerification(data: VerificationCreateInput!): Verification!
+  updateVerification(data: VerificationUpdateInput!, where: VerificationWhereUniqueInput!): Verification
+  updateManyVerifications(data: VerificationUpdateManyMutationInput!, where: VerificationWhereInput): BatchPayload!
+  upsertVerification(where: VerificationWhereUniqueInput!, create: VerificationCreateInput!, update: VerificationUpdateInput!): Verification!
+  deleteVerification(where: VerificationWhereUniqueInput!): Verification
+  deleteManyVerifications(where: VerificationWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -315,18 +202,340 @@ type PageInfo {
 }
 
 type Query {
-  comparison(where: ComparisonWhereUniqueInput!): Comparison
-  comparisons(where: ComparisonWhereInput, orderBy: ComparisonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comparison]!
-  comparisonsConnection(where: ComparisonWhereInput, orderBy: ComparisonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ComparisonConnection!
   fingerprint(where: FingerprintWhereUniqueInput!): Fingerprint
   fingerprints(where: FingerprintWhereInput, orderBy: FingerprintOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Fingerprint]!
   fingerprintsConnection(where: FingerprintWhereInput, orderBy: FingerprintOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FingerprintConnection!
+  user(where: UserWhereUniqueInput!): User
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  verification(where: VerificationWhereUniqueInput!): Verification
+  verifications(where: VerificationWhereInput, orderBy: VerificationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Verification]!
+  verificationsConnection(where: VerificationWhereInput, orderBy: VerificationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): VerificationConnection!
   node(id: ID!): Node
 }
 
 type Subscription {
-  comparison(where: ComparisonSubscriptionWhereInput): ComparisonSubscriptionPayload
   fingerprint(where: FingerprintSubscriptionWhereInput): FingerprintSubscriptionPayload
+  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  verification(where: VerificationSubscriptionWhereInput): VerificationSubscriptionPayload
+}
+
+type User {
+  id: ID!
+  email: String!
+  name: String
+  lastname: String
+  password: String!
+  isAdmin: Boolean!
+}
+
+type UserConnection {
+  pageInfo: PageInfo!
+  edges: [UserEdge]!
+  aggregate: AggregateUser!
+}
+
+input UserCreateInput {
+  id: ID
+  email: String!
+  name: String
+  lastname: String
+  password: String!
+  isAdmin: Boolean!
+}
+
+input UserCreateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
+type UserEdge {
+  node: User!
+  cursor: String!
+}
+
+enum UserOrderByInput {
+  id_ASC
+  id_DESC
+  email_ASC
+  email_DESC
+  name_ASC
+  name_DESC
+  lastname_ASC
+  lastname_DESC
+  password_ASC
+  password_DESC
+  isAdmin_ASC
+  isAdmin_DESC
+}
+
+type UserPreviousValues {
+  id: ID!
+  email: String!
+  name: String
+  lastname: String
+  password: String!
+  isAdmin: Boolean!
+}
+
+type UserSubscriptionPayload {
+  mutation: MutationType!
+  node: User
+  updatedFields: [String!]
+  previousValues: UserPreviousValues
+}
+
+input UserSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: UserWhereInput
+  AND: [UserSubscriptionWhereInput!]
+  OR: [UserSubscriptionWhereInput!]
+  NOT: [UserSubscriptionWhereInput!]
+}
+
+input UserUpdateDataInput {
+  email: String
+  name: String
+  lastname: String
+  password: String
+  isAdmin: Boolean
+}
+
+input UserUpdateInput {
+  email: String
+  name: String
+  lastname: String
+  password: String
+  isAdmin: Boolean
+}
+
+input UserUpdateManyMutationInput {
+  email: String
+  name: String
+  lastname: String
+  password: String
+  isAdmin: Boolean
+}
+
+input UserUpdateOneRequiredInput {
+  create: UserCreateInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
+}
+
+input UserWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  email: String
+  email_not: String
+  email_in: [String!]
+  email_not_in: [String!]
+  email_lt: String
+  email_lte: String
+  email_gt: String
+  email_gte: String
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  lastname: String
+  lastname_not: String
+  lastname_in: [String!]
+  lastname_not_in: [String!]
+  lastname_lt: String
+  lastname_lte: String
+  lastname_gt: String
+  lastname_gte: String
+  lastname_contains: String
+  lastname_not_contains: String
+  lastname_starts_with: String
+  lastname_not_starts_with: String
+  lastname_ends_with: String
+  lastname_not_ends_with: String
+  password: String
+  password_not: String
+  password_in: [String!]
+  password_not_in: [String!]
+  password_lt: String
+  password_lte: String
+  password_gt: String
+  password_gte: String
+  password_contains: String
+  password_not_contains: String
+  password_starts_with: String
+  password_not_starts_with: String
+  password_ends_with: String
+  password_not_ends_with: String
+  isAdmin: Boolean
+  isAdmin_not: Boolean
+  AND: [UserWhereInput!]
+  OR: [UserWhereInput!]
+  NOT: [UserWhereInput!]
+}
+
+input UserWhereUniqueInput {
+  id: ID
+}
+
+type Verification {
+  id: ID!
+  fingerprintA: Fingerprint!
+  fingerprintB: Fingerprint!
+  match: Boolean!
+  coincidence: Int!
+  createdBy: User!
+  createdAt: DateTime!
+}
+
+type VerificationConnection {
+  pageInfo: PageInfo!
+  edges: [VerificationEdge]!
+  aggregate: AggregateVerification!
+}
+
+input VerificationCreateInput {
+  id: ID
+  fingerprintA: FingerprintCreateOneInput!
+  fingerprintB: FingerprintCreateOneInput!
+  match: Boolean!
+  coincidence: Int!
+  createdBy: UserCreateOneInput!
+}
+
+type VerificationEdge {
+  node: Verification!
+  cursor: String!
+}
+
+enum VerificationOrderByInput {
+  id_ASC
+  id_DESC
+  match_ASC
+  match_DESC
+  coincidence_ASC
+  coincidence_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type VerificationPreviousValues {
+  id: ID!
+  match: Boolean!
+  coincidence: Int!
+  createdAt: DateTime!
+}
+
+type VerificationSubscriptionPayload {
+  mutation: MutationType!
+  node: Verification
+  updatedFields: [String!]
+  previousValues: VerificationPreviousValues
+}
+
+input VerificationSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: VerificationWhereInput
+  AND: [VerificationSubscriptionWhereInput!]
+  OR: [VerificationSubscriptionWhereInput!]
+  NOT: [VerificationSubscriptionWhereInput!]
+}
+
+input VerificationUpdateInput {
+  fingerprintA: FingerprintUpdateOneRequiredInput
+  fingerprintB: FingerprintUpdateOneRequiredInput
+  match: Boolean
+  coincidence: Int
+  createdBy: UserUpdateOneRequiredInput
+}
+
+input VerificationUpdateManyMutationInput {
+  match: Boolean
+  coincidence: Int
+}
+
+input VerificationWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  fingerprintA: FingerprintWhereInput
+  fingerprintB: FingerprintWhereInput
+  match: Boolean
+  match_not: Boolean
+  coincidence: Int
+  coincidence_not: Int
+  coincidence_in: [Int!]
+  coincidence_not_in: [Int!]
+  coincidence_lt: Int
+  coincidence_lte: Int
+  coincidence_gt: Int
+  coincidence_gte: Int
+  createdBy: UserWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [VerificationWhereInput!]
+  OR: [VerificationWhereInput!]
+  NOT: [VerificationWhereInput!]
+}
+
+input VerificationWhereUniqueInput {
+  id: ID
 }
 `
       }

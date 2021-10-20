@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core'
 // Utils
 import placeholder from '../../img/placeholder.png'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 
 const fingerprintLocations = [
   {
@@ -64,6 +65,9 @@ const VerificationForm = (props) => {
     imageError
   } = props
 
+  const matches = useMediaQuery('(min-width:600px)')
+  console.log({ matches })
+
   React.useEffect(() => {
     if (!file) {
       setSrc(undefined)
@@ -77,7 +81,7 @@ const VerificationForm = (props) => {
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={6}>
+      <Grid item xs={12} md={6}>
         <TextField
           error={fingerPrintLocationError}
           helperText={fingerPrintLocationError}
@@ -94,7 +98,7 @@ const VerificationForm = (props) => {
           ))}
         </TextField>
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} md={6}>
         <TextField
           error={sideError}
           helperText={sideError}
@@ -117,13 +121,14 @@ const VerificationForm = (props) => {
         <FormHelperText error={imageError}>{imageError || 'Archivos soportados: .jpg, .bmp'}</FormHelperText>
       </Grid>
       <Grid
-        item xs={12}
+        item
+        xs={12}
         container
         justifyContent='center'
         style={{
           overflow: 'hidden',
           padding: 0,
-          height: 250,
+          height: matches ? 250 : 200,
           borderRadius: 10,
           borderStyle: 'solid',
           borderColor: '#3f51b5'
