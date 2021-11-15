@@ -16,7 +16,7 @@ type Verification {
 
 type User {
   id: ID! @id
-  email: String!
+  email: String! @unique
   name: String
   lastname: String
   password: String!

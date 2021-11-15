@@ -12,7 +12,7 @@ const server = new ApolloServer({
     'utf8'
   ),
   resolvers,
-  // middlewares: [permissions],
+  middlewares: [permissions],
   context: {
     prisma
   }

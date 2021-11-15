@@ -16,7 +16,7 @@ const Mutation = {
       user
     }
   },
-  logIn: async (parent, { email, password }, context) => {
+  logIn: async (parent, { input: { email, password } }, context) => {
     const user = await context.prisma.user({ email })
     if (!user) {
       throw new Error(`No user found for email: ${email}`)
