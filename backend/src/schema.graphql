@@ -31,6 +31,7 @@ type Verification {
   match: Boolean!
   coincidence: Float!
   createdAt: DateTime!
+  createdBy: User!
 }
 
 # Payloads
