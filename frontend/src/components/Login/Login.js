@@ -6,11 +6,13 @@ import { Grid, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 // React Router
 import { withRouter } from 'react-router'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 // Utils
 import { emailRegex } from './emailRegex'
 import { CustomForm, useCustomForm } from '../Utils/CustomForm'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
+import { useMutation } from '@apollo/client'
+import { LOGIN } from '../Mutations/Mutations'
 
 const useStyles = makeStyles({
   parentGrid: {
@@ -48,6 +50,18 @@ const Login = (props) => {
   const { formFunctions, handleSubmit } = useCustomForm()
   const matches = useMediaQuery('(min-width:600px)')
 
+  const handleOnCompleted = ({ logIn: logInData }) => {
+    const { token } = logInData
+    localStorage.setItem('token', token)
+    history.replace('/verificacion')
+  }
+
+  const handleOnError = (error) => {
+    console.log(error)
+  }
+
+  const [logIn, { loading }] = useMutation(LOGIN, { onError: handleOnError, onCompleted: handleOnCompleted })
+
   const form = {
     fields: [
       {
@@ -72,30 +86,32 @@ const Login = (props) => {
   }
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data)
-    history.push('/verificacion')
+    logIn({ variables: { input: data } })
   })
 
   return (
-    <Grid className={classes.parentGrid} container alignItems='center' justifyContent='center'>
-      <Grid className={matches ? classes.loginGrid : classes.responsiveLoginGrid} item xs={10} md={4}>
-        <div style={{ marginBottom: 15 }}>
-          <Typography component='h1' variant='h4'>Iniciar sesión</Typography>
-          <Typography style={{ color: 'gray' }} variant='body2'>
-            ¿No tienes una cuenta? <Link to='/'>Solicita acceso</Link>
-          </Typography>
-        </div>
-        <CustomForm
-          form={form}
-          formFunctions={formFunctions}
-          onSubmit={onSubmit}
-        />
+    <>
+      <Grid className={classes.parentGrid} container alignItems='center' justifyContent='center'>
+        <Grid className={matches ? classes.loginGrid : classes.responsiveLoginGrid} item xs={10} md={4}>
+          <div style={{ marginBottom: 15 }}>
+            <Typography component='h1' variant='h4'>Iniciar sesión</Typography>
+            {/* <Typography style={{ color: 'gray' }} variant='body2'>
+              ¿No tienes una cuenta? <Link to='/'>Solicita acceso</Link>
+            </Typography> */}
+          </div>
+          <CustomForm
+            form={form}
+            formFunctions={formFunctions}
+            onSubmit={onSubmit}
+            loading={loading}
+          />
+        </Grid>
+        {matches &&
+          <Grid className={classes.loginImage} item xs={10} md={5} justifyContent='center'>
+            <img width='425' src={loginPicture} alt='Detección de huellas' />
+          </Grid>}
       </Grid>
-      {matches &&
-        <Grid className={classes.loginImage} item xs={10} md={5} justifyContent='center'>
-          <img width='425' src={loginPicture} alt='Detección de huellas' />
-        </Grid>}
-    </Grid>
+    </>
   )
 }
 

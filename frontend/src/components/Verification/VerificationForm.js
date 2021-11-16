@@ -66,7 +66,7 @@ const VerificationForm = (props) => {
   } = props
 
   const matches = useMediaQuery('(min-width:600px)')
-  console.log({ matches })
+  // console.log({ matches })
 
   React.useEffect(() => {
     if (!file) {
@@ -77,7 +77,7 @@ const VerificationForm = (props) => {
     setSrc(objectUrl)
     // Free memory when ever this component is unmounted
     return () => URL.revokeObjectURL(objectUrl)
-  }, [file])
+  }, [file, setSrc])
 
   return (
     <Grid container spacing={3}>
@@ -142,6 +142,7 @@ const VerificationForm = (props) => {
             objectFit: 'contain'
           }}
           src={src || placeholder}
+          alt='Huella'
         />
       </Grid>
     </Grid>

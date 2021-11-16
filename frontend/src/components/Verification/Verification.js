@@ -5,6 +5,8 @@ import { withRouter } from 'react-router'
 import { Button, Container, Grid, Typography } from '@material-ui/core'
 // Utils
 import VerificationForm from './VerificationForm'
+import { useQuery } from '@apollo/client'
+import { GET_ALL_VERIFICATIONS } from '../Queries/Queries'
 
 const Verification = () => {
   // Fingerprint one
@@ -25,6 +27,17 @@ const Verification = () => {
   const [imageErrorOne, setImageErrorOne] = React.useState('')
   const [imageErrorTwo, setImageErrorTwo] = React.useState('')
 
+  const { loading, error, data } = useQuery(GET_ALL_VERIFICATIONS)
+
+  // if (loading) return 'Loading...'
+  if (error) {
+    console.log({ error })
+  }
+
+  if (data) {
+    console.log({ data })
+  }
+
   const validateForm = () => {
     let valid = true
     if (fingerprintLocationOne !== fingerprintLocationTwo) {
@@ -42,7 +55,7 @@ const Verification = () => {
     }
 
     if (fileOne) {
-      console.log(fileOne.type)
+      // console.log(fileOne.type)
       if (fileOne.type !== 'image/jpg' && fileOne.type !== 'image/jpeg' && fileOne.type !== 'image/bmp') {
         setImageErrorOne('Solo se aceptan los formatos .jpg y .bmp')
         valid = false
@@ -84,7 +97,7 @@ const Verification = () => {
       file: fileTwo
     }
 
-    console.log({ valid, fingerprintOne, fingerprintTwo })
+    // console.log({ valid, fingerprintOne, fingerprintTwo })
   }
 
   return (
