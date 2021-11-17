@@ -9,6 +9,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "firebase": "^9.4.1",
     "graphql": "^16.0.1",
     "material-table": "^1.69.3",
     "react": "^16.13.1",

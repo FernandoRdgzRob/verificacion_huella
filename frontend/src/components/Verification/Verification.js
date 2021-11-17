@@ -7,6 +7,8 @@ import { Button, Container, Grid, Typography } from '@material-ui/core'
 import VerificationForm from './VerificationForm'
 import { useQuery } from '@apollo/client'
 import { GET_ALL_VERIFICATIONS } from '../Queries/Queries'
+import storage from '../../firebase'
+import { ref, uploadBytes } from 'firebase/storage'
 
 const Verification = () => {
   // Fingerprint one
@@ -29,7 +31,6 @@ const Verification = () => {
 
   const { loading, error, data } = useQuery(GET_ALL_VERIFICATIONS)
 
-  // if (loading) return 'Loading...'
   if (error) {
     console.log({ error })
   }
@@ -97,7 +98,18 @@ const Verification = () => {
       file: fileTwo
     }
 
-    // console.log({ valid, fingerprintOne, fingerprintTwo })
+    console.log({ valid, fingerprintOne, fingerprintTwo })
+
+    try {
+      const storageRef = ref(storage, `/images/${fingerprintOne.file.name}`)
+      uploadBytes(storageRef, fingerprintOne.file).then((snapshot) => {
+        console.log('Image uploaded')
+      })
+    } catch (error) {
+      console.log({ error })
+    }
+
+    console.log('Finished')
   }
 
   return (

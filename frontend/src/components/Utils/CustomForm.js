@@ -48,7 +48,7 @@ const CustomForm = (props) => {
               placeholder={field.placeholder}
               type={field.type}
               label={field.label}
-              error={errors[field.name]?.type}
+              error={!!errors[field.name]?.type}
               helperText={errors[field.name]?.type ? errors[field.name]?.message : ''}
               {...register(field.name, { required: field.required, pattern: field.pattern })}
             />

@@ -12,6 +12,8 @@ const Query = {
       }
     })
 
+    // Probar código para llamar .exe desde Node.js
+
     return verifications
   }
 }
