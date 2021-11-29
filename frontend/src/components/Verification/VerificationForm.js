@@ -66,7 +66,6 @@ const VerificationForm = (props) => {
   } = props
 
   const matches = useMediaQuery('(min-width:600px)')
-  // console.log({ matches })
 
   React.useEffect(() => {
     if (!file) {

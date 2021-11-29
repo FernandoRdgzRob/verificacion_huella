@@ -13,6 +13,7 @@ import History from './components/History/History'
 import Admin from './components/Admin/Admin'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import MobileAdmin from './components/Admin/MobileAdmin'
+import PrivateRoute from './components/Utils/PrivateRoute'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,7 +73,9 @@ function App () {
               path={route.path}
               exact={route.exact}
             >
-              <route.sidebar />
+              <PrivateRoute>
+                <route.sidebar />
+              </PrivateRoute>
             </Route>
           ))}
         </Switch>
@@ -83,9 +86,11 @@ function App () {
               path={route.path}
               exact={route.exact}
             >
-              <main className={index === 1 ? classes.history : classes.content}>
-                <route.main />
-              </main>
+              <PrivateRoute>
+                <main className={index === 1 ? classes.history : classes.content}>
+                  <route.main />
+                </main>
+              </PrivateRoute>
             </Route>
           ))}
         </Switch>

@@ -101,9 +101,14 @@ const Verification = () => {
     console.log({ valid, fingerprintOne, fingerprintTwo })
 
     try {
-      const storageRef = ref(storage, `/images/${fingerprintOne.file.name}`)
-      uploadBytes(storageRef, fingerprintOne.file).then((snapshot) => {
-        console.log('Image uploaded')
+      const storageRefA = ref(storage, `/images/${Math.random().toString(36).substr(2, 9)}_${fingerprintOne.file.name}`)
+      uploadBytes(storageRefA, fingerprintOne.file).then((snapshot) => {
+        console.log('Image A uploaded')
+      })
+
+      const storageRefB = ref(storage, `/images/${Math.random().toString(36).substr(2, 9)}_${fingerprintTwo.file.name}`)
+      uploadBytes(storageRefB, fingerprintTwo.file).then((snapshot) => {
+        console.log('Image B uploaded')
       })
     } catch (error) {
       console.log({ error })
