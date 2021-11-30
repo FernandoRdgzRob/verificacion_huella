@@ -1,4 +1,5 @@
 const { verify } = require('jsonwebtoken')
+const { exec } = require('child_process')
 const APP_SECRET = 'appsecret321'
 
 function getUserId (req) {
@@ -27,8 +28,22 @@ async function checkValidUser (context) {
   }
 }
 
+function runLibrary (command) {
+  return new Promise(function (resolve, reject) {
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        reject(error)
+        return
+      }
+
+      resolve(stdout.trim())
+    })
+  })
+}
+
 module.exports = {
   checkValidUser,
   getUserId,
+  runLibrary,
   APP_SECRET
 }

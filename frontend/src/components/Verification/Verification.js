@@ -8,7 +8,7 @@ import VerificationForm from './VerificationForm'
 import { useQuery } from '@apollo/client'
 import { GET_ALL_VERIFICATIONS } from '../Queries/Queries'
 import storage from '../../firebase'
-import { ref, uploadBytes } from 'firebase/storage'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 const Verification = () => {
   // Fingerprint one
@@ -83,42 +83,71 @@ const Verification = () => {
     return valid
   }
 
-  const onSubmit = () => {
-    const valid = validateForm()
+  // const uploadToFirebase = () => {
+  //   let storageRefA
+  //   try {
+  //     const storageRefA = ref(storage, `/images/${Math.random().toString(36).substr(2, 9)}_${fileOne.name}`)
+  //     uploadBytes(storageRefA, fileOne).then((snapshot) => {
+  //       console.log('Image A uploaded')
+  //       getDownloadURL(snapshot.ref).then((downloadURL) => {
+  //         filelinkOne = downloadURL
+  //       })
+  //     })
 
-    const fingerprintOne = {
-      location: fingerprintLocationOne,
-      side: sideOne,
-      file: fileOne
-    }
+  //     const storageRefB = ref(storage, `/images/${Math.random().toString(36).substr(2, 9)}_${fileTwo.name}`)
+  //     uploadBytes(storageRefB, fileTwo).then((snapshot) => {
+  //       console.log('Image B uploaded')
+  //       getDownloadURL(snapshot.ref).then((downloadURL) => {
+  //         filelinkTwo = downloadURL
+  //       })
+  //     })
+  //   } catch (error) {
+  //     console.log({ error })
+  //   }
 
-    const fingerprintTwo = {
-      location: fingerprintLocationTwo,
-      side: sideTwo,
-      file: fileTwo
-    }
+  // }
 
-    console.log({ valid, fingerprintOne, fingerprintTwo })
-
+  const uploadToFirebase = async () => {
+    let downloadURLOne = null
+    let downloadURLTwo = null
     try {
-      const storageRefA = ref(storage, `/images/${Math.random().toString(36).substr(2, 9)}_${fingerprintOne.file.name}`)
-      uploadBytes(storageRefA, fingerprintOne.file).then((snapshot) => {
-        console.log('Image A uploaded')
-      })
+      const storageRefA = ref(storage, `/images/${Math.random().toString(36).substr(2, 9)}_${fileOne.name}`)
+      const snapshotOne = await uploadBytes(storageRefA, fileOne)
+      downloadURLOne = await getDownloadURL(snapshotOne.ref)
 
-      const storageRefB = ref(storage, `/images/${Math.random().toString(36).substr(2, 9)}_${fingerprintTwo.file.name}`)
-      uploadBytes(storageRefB, fingerprintTwo.file).then((snapshot) => {
-        console.log('Image B uploaded')
-      })
+      const storageRefB = ref(storage, `/images/${Math.random().toString(36).substr(2, 9)}_${fileTwo.name}`)
+      const snapshotTwo = await uploadBytes(storageRefB, fileTwo)
+      downloadURLTwo = await getDownloadURL(snapshotTwo.ref)
     } catch (error) {
       console.log({ error })
     }
 
-    console.log('Finished')
+    return [downloadURLOne, downloadURLTwo]
+  }
+
+  const onSubmit = async () => {
+    const valid = validateForm()
+
+    if (valid) {
+      const [filelinkOne, filelinkTwo] = await uploadToFirebase()
+
+      const firstFingerprint = {
+        type: fingerprintLocationOne,
+        side: sideOne,
+        filelink: filelinkOne
+      }
+
+      const secondFingerprint = {
+        type: fingerprintLocationTwo,
+        side: sideTwo,
+        filelink: filelinkTwo
+      }
+
+      console.log({ valid, firstFingerprint, secondFingerprint })
+    }
   }
 
   return (
-
     <Container maxWidth='md' style={{ marginTop: 30 }}>
       <Typography style={{ marginBottom: 15 }} component='h1' variant='h4'>Verificación</Typography>
       <Grid container spacing={10}>

@@ -195,7 +195,9 @@ export type FingerprintOrderByInput =
   | "type_ASC"
   | "type_DESC"
   | "side_ASC"
-  | "side_DESC";
+  | "side_DESC"
+  | "filelink_ASC"
+  | "filelink_DESC";
 
 export type UserOrderByInput =
   | "id_ASC"
@@ -270,6 +272,20 @@ export interface FingerprintWhereInput {
   side_not_starts_with?: Maybe<String>;
   side_ends_with?: Maybe<String>;
   side_not_ends_with?: Maybe<String>;
+  filelink?: Maybe<String>;
+  filelink_not?: Maybe<String>;
+  filelink_in?: Maybe<String[] | String>;
+  filelink_not_in?: Maybe<String[] | String>;
+  filelink_lt?: Maybe<String>;
+  filelink_lte?: Maybe<String>;
+  filelink_gt?: Maybe<String>;
+  filelink_gte?: Maybe<String>;
+  filelink_contains?: Maybe<String>;
+  filelink_not_contains?: Maybe<String>;
+  filelink_starts_with?: Maybe<String>;
+  filelink_not_starts_with?: Maybe<String>;
+  filelink_ends_with?: Maybe<String>;
+  filelink_not_ends_with?: Maybe<String>;
   AND?: Maybe<FingerprintWhereInput[] | FingerprintWhereInput>;
   OR?: Maybe<FingerprintWhereInput[] | FingerprintWhereInput>;
   NOT?: Maybe<FingerprintWhereInput[] | FingerprintWhereInput>;
@@ -381,14 +397,14 @@ export interface VerificationWhereInput {
   fingerprintB?: Maybe<FingerprintWhereInput>;
   match?: Maybe<Boolean>;
   match_not?: Maybe<Boolean>;
-  coincidence?: Maybe<Int>;
-  coincidence_not?: Maybe<Int>;
-  coincidence_in?: Maybe<Int[] | Int>;
-  coincidence_not_in?: Maybe<Int[] | Int>;
-  coincidence_lt?: Maybe<Int>;
-  coincidence_lte?: Maybe<Int>;
-  coincidence_gt?: Maybe<Int>;
-  coincidence_gte?: Maybe<Int>;
+  coincidence?: Maybe<Float>;
+  coincidence_not?: Maybe<Float>;
+  coincidence_in?: Maybe<Float[] | Float>;
+  coincidence_not_in?: Maybe<Float[] | Float>;
+  coincidence_lt?: Maybe<Float>;
+  coincidence_lte?: Maybe<Float>;
+  coincidence_gt?: Maybe<Float>;
+  coincidence_gte?: Maybe<Float>;
   createdBy?: Maybe<UserWhereInput>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
@@ -407,16 +423,19 @@ export interface FingerprintCreateInput {
   id?: Maybe<ID_Input>;
   type: String;
   side: String;
+  filelink: String;
 }
 
 export interface FingerprintUpdateInput {
   type?: Maybe<String>;
   side?: Maybe<String>;
+  filelink?: Maybe<String>;
 }
 
 export interface FingerprintUpdateManyMutationInput {
   type?: Maybe<String>;
   side?: Maybe<String>;
+  filelink?: Maybe<String>;
 }
 
 export interface UserCreateInput {
@@ -449,7 +468,7 @@ export interface VerificationCreateInput {
   fingerprintA: FingerprintCreateOneInput;
   fingerprintB: FingerprintCreateOneInput;
   match: Boolean;
-  coincidence: Int;
+  coincidence: Float;
   createdBy: UserCreateOneInput;
 }
 
@@ -467,7 +486,7 @@ export interface VerificationUpdateInput {
   fingerprintA?: Maybe<FingerprintUpdateOneRequiredInput>;
   fingerprintB?: Maybe<FingerprintUpdateOneRequiredInput>;
   match?: Maybe<Boolean>;
-  coincidence?: Maybe<Int>;
+  coincidence?: Maybe<Float>;
   createdBy?: Maybe<UserUpdateOneRequiredInput>;
 }
 
@@ -481,6 +500,7 @@ export interface FingerprintUpdateOneRequiredInput {
 export interface FingerprintUpdateDataInput {
   type?: Maybe<String>;
   side?: Maybe<String>;
+  filelink?: Maybe<String>;
 }
 
 export interface FingerprintUpsertNestedInput {
@@ -510,7 +530,7 @@ export interface UserUpsertNestedInput {
 
 export interface VerificationUpdateManyMutationInput {
   match?: Maybe<Boolean>;
-  coincidence?: Maybe<Int>;
+  coincidence?: Maybe<Float>;
 }
 
 export interface FingerprintSubscriptionWhereInput {
@@ -566,12 +586,14 @@ export interface Fingerprint {
   id: ID_Output;
   type: String;
   side: String;
+  filelink: String;
 }
 
 export interface FingerprintPromise extends Promise<Fingerprint>, Fragmentable {
   id: () => Promise<ID_Output>;
   type: () => Promise<String>;
   side: () => Promise<String>;
+  filelink: () => Promise<String>;
 }
 
 export interface FingerprintSubscription
@@ -580,6 +602,7 @@ export interface FingerprintSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   type: () => Promise<AsyncIterator<String>>;
   side: () => Promise<AsyncIterator<String>>;
+  filelink: () => Promise<AsyncIterator<String>>;
 }
 
 export interface FingerprintNullablePromise
@@ -588,6 +611,7 @@ export interface FingerprintNullablePromise
   id: () => Promise<ID_Output>;
   type: () => Promise<String>;
   side: () => Promise<String>;
+  filelink: () => Promise<String>;
 }
 
 export interface FingerprintConnection {
@@ -766,7 +790,7 @@ export interface AggregateUserSubscription
 export interface Verification {
   id: ID_Output;
   match: Boolean;
-  coincidence: Int;
+  coincidence: Float;
   createdAt: DateTimeOutput;
 }
 
@@ -777,7 +801,7 @@ export interface VerificationPromise
   fingerprintA: <T = FingerprintPromise>() => T;
   fingerprintB: <T = FingerprintPromise>() => T;
   match: () => Promise<Boolean>;
-  coincidence: () => Promise<Int>;
+  coincidence: () => Promise<Float>;
   createdBy: <T = UserPromise>() => T;
   createdAt: () => Promise<DateTimeOutput>;
 }
@@ -789,7 +813,7 @@ export interface VerificationSubscription
   fingerprintA: <T = FingerprintSubscription>() => T;
   fingerprintB: <T = FingerprintSubscription>() => T;
   match: () => Promise<AsyncIterator<Boolean>>;
-  coincidence: () => Promise<AsyncIterator<Int>>;
+  coincidence: () => Promise<AsyncIterator<Float>>;
   createdBy: <T = UserSubscription>() => T;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -801,7 +825,7 @@ export interface VerificationNullablePromise
   fingerprintA: <T = FingerprintPromise>() => T;
   fingerprintB: <T = FingerprintPromise>() => T;
   match: () => Promise<Boolean>;
-  coincidence: () => Promise<Int>;
+  coincidence: () => Promise<Float>;
   createdBy: <T = UserPromise>() => T;
   createdAt: () => Promise<DateTimeOutput>;
 }
@@ -907,6 +931,7 @@ export interface FingerprintPreviousValues {
   id: ID_Output;
   type: String;
   side: String;
+  filelink: String;
 }
 
 export interface FingerprintPreviousValuesPromise
@@ -915,6 +940,7 @@ export interface FingerprintPreviousValuesPromise
   id: () => Promise<ID_Output>;
   type: () => Promise<String>;
   side: () => Promise<String>;
+  filelink: () => Promise<String>;
 }
 
 export interface FingerprintPreviousValuesSubscription
@@ -923,6 +949,7 @@ export interface FingerprintPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   type: () => Promise<AsyncIterator<String>>;
   side: () => Promise<AsyncIterator<String>>;
+  filelink: () => Promise<AsyncIterator<String>>;
 }
 
 export interface UserSubscriptionPayload {
@@ -1009,7 +1036,7 @@ export interface VerificationSubscriptionPayloadSubscription
 export interface VerificationPreviousValues {
   id: ID_Output;
   match: Boolean;
-  coincidence: Int;
+  coincidence: Float;
   createdAt: DateTimeOutput;
 }
 
@@ -1018,7 +1045,7 @@ export interface VerificationPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   match: () => Promise<Boolean>;
-  coincidence: () => Promise<Int>;
+  coincidence: () => Promise<Float>;
   createdAt: () => Promise<DateTimeOutput>;
 }
 
@@ -1027,7 +1054,7 @@ export interface VerificationPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   match: () => Promise<AsyncIterator<Boolean>>;
-  coincidence: () => Promise<AsyncIterator<Int>>;
+  coincidence: () => Promise<AsyncIterator<Float>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
@@ -1051,6 +1078,11 @@ export type Int = number;
 The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean;
+
+/*
+The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point).
+*/
+export type Float = number;
 
 /*
 DateTime scalar input type, allowing Date
