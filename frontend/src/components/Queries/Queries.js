@@ -5,7 +5,19 @@ export const GET_ALL_VERIFICATIONS = gql`
     getAllVerifications {
       id
       match
-      coincidence
+      fingerprintA {
+        id
+        type
+        side
+        filelink
+      }
+      fingerprintB {
+        id
+        type
+        side
+        filelink
+      }
+      createdAt
     }
   }
 `

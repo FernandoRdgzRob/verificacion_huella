@@ -2,13 +2,13 @@ import React from 'react'
 // React Router
 import { withRouter } from 'react-router'
 // Material UI
-import { Button, Container, Grid, Typography } from '@material-ui/core'
+import { Button, CircularProgress, Container, Grid, Typography } from '@material-ui/core'
 // Utils
 import VerificationForm from './VerificationForm'
-import { useQuery } from '@apollo/client'
-import { GET_ALL_VERIFICATIONS } from '../Queries/Queries'
 import storage from '../../firebase'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { useMutation } from '@apollo/client'
+import { CREATE_VERIFICATION } from '../Mutations/Mutations'
 
 const Verification = () => {
   // Fingerprint one
@@ -29,15 +29,12 @@ const Verification = () => {
   const [imageErrorOne, setImageErrorOne] = React.useState('')
   const [imageErrorTwo, setImageErrorTwo] = React.useState('')
 
-  const { loading, error, data } = useQuery(GET_ALL_VERIFICATIONS)
-
-  if (error) {
-    console.log({ error })
-  }
-
-  if (data) {
+  const handleOnCompleted = (data) => {
     console.log({ data })
   }
+
+  const [loadingFirebase, setLoadingFirebase] = React.useState(false)
+  const [createVerification, { loading }] = useMutation(CREATE_VERIFICATION, { onCompleted: handleOnCompleted })
 
   const validateForm = () => {
     let valid = true
@@ -83,30 +80,6 @@ const Verification = () => {
     return valid
   }
 
-  // const uploadToFirebase = () => {
-  //   let storageRefA
-  //   try {
-  //     const storageRefA = ref(storage, `/images/${Math.random().toString(36).substr(2, 9)}_${fileOne.name}`)
-  //     uploadBytes(storageRefA, fileOne).then((snapshot) => {
-  //       console.log('Image A uploaded')
-  //       getDownloadURL(snapshot.ref).then((downloadURL) => {
-  //         filelinkOne = downloadURL
-  //       })
-  //     })
-
-  //     const storageRefB = ref(storage, `/images/${Math.random().toString(36).substr(2, 9)}_${fileTwo.name}`)
-  //     uploadBytes(storageRefB, fileTwo).then((snapshot) => {
-  //       console.log('Image B uploaded')
-  //       getDownloadURL(snapshot.ref).then((downloadURL) => {
-  //         filelinkTwo = downloadURL
-  //       })
-  //     })
-  //   } catch (error) {
-  //     console.log({ error })
-  //   }
-
-  // }
-
   const uploadToFirebase = async () => {
     let downloadURLOne = null
     let downloadURLTwo = null
@@ -129,6 +102,7 @@ const Verification = () => {
     const valid = validateForm()
 
     if (valid) {
+      setLoadingFirebase(true)
       const [filelinkOne, filelinkTwo] = await uploadToFirebase()
 
       const firstFingerprint = {
@@ -143,7 +117,13 @@ const Verification = () => {
         filelink: filelinkTwo
       }
 
-      console.log({ valid, firstFingerprint, secondFingerprint })
+      const input = {
+        firstFingerprint,
+        secondFingerprint
+      }
+
+      setLoadingFirebase(false)
+      createVerification({ variables: { input } })
     }
   }
 
@@ -184,9 +164,16 @@ const Verification = () => {
           />
         </Grid>
         <Grid item xs={6} md={3}>
-          <Button fullWidth color='primary' onClick={onSubmit} variant='contained'>
-            Verificar
-          </Button>
+          {
+            (loading || loadingFirebase) &&
+              <CircularProgress />
+          }
+          {
+            !(loading || loadingFirebase) &&
+              <Button fullWidth color='primary' onClick={onSubmit} variant='contained'>
+                Verificar
+              </Button>
+          }
         </Grid>
       </Grid>
     </Container>

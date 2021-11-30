@@ -71,17 +71,17 @@ const Sidebar = (props) => {
       name: 'Historial',
       icon: <HistoryIcon style={{ color: '#ffffff' }} />,
       route: '/historial'
-    },
-    {
-      name: 'Perfil',
-      icon: <PersonIcon style={{ color: '#ffffff' }} />,
-      route: '/perfil'
-    },
-    {
-      name: 'Control de usuarios',
-      icon: <PeopleIcon style={{ color: '#ffffff' }} />,
-      route: '/admin'
     }
+    // {
+    //   name: 'Perfil',
+    //   icon: <PersonIcon style={{ color: '#ffffff' }} />,
+    //   route: '/perfil'
+    // },
+    // {
+    //   name: 'Control de usuarios',
+    //   icon: <PeopleIcon style={{ color: '#ffffff' }} />,
+    //   route: '/admin'
+    // }
   ]
 
   const drawer = (
@@ -106,7 +106,7 @@ const Sidebar = (props) => {
         ))}
       </List>
       <Divider />
-      <List>
+      <List style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', height: '55%' }}>
         <Link to='/' style={{ textDecoration: 'none', color: '#ffffff' }}>
           <ListItem button>
             <ListItemIcon><ExitToAppIcon style={{ color: '#ffffff' }} /></ListItemIcon>

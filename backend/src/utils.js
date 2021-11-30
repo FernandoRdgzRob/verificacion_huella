@@ -41,9 +41,18 @@ function runLibrary (command) {
   })
 }
 
+function getURL (url) {
+  const processedURL = url.indexOf('&') !== -1
+    ? url.substring(0, url.indexOf('&'))
+    : url
+
+  return processedURL
+}
+
 module.exports = {
   checkValidUser,
   getUserId,
   runLibrary,
+  getURL,
   APP_SECRET
 }

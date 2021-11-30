@@ -1,6 +1,6 @@
 const { hash, compare } = require('bcrypt')
 const { sign } = require('jsonwebtoken')
-const { APP_SECRET, checkValidUser, runLibrary } = require('../utils')
+const { APP_SECRET, checkValidUser, runLibrary, getURL } = require('../utils')
 
 const Mutation = {
   signUp: async (parent, { name, email, password }, context) => {
@@ -35,13 +35,20 @@ const Mutation = {
     const { input: { firstFingerprint, secondFingerprint } } = args
     const userId = await checkValidUser(context)
 
+    const firstFingerprintURL = getURL(firstFingerprint.filelink)
+    const secondFingerprintURL = getURL(secondFingerprint.filelink)
+
     const upsertedFirstFingerprint = await context.prisma.createFingerprint({
-      ...firstFingerprint
+      ...firstFingerprint,
+      filelink: firstFingerprintURL
     })
 
     const upsertedSecondFingerprint = await context.prisma.createFingerprint({
-      ...secondFingerprint
+      ...secondFingerprint,
+      filelink: secondFingerprintURL
     })
+
+    const result = await runLibrary(`wine library/FingerprintVerification.exe ${firstFingerprintURL} ${secondFingerprintURL}`)
 
     const verification = await context.prisma.createVerification({
       fingerprintA: {
@@ -54,8 +61,7 @@ const Mutation = {
           id: upsertedSecondFingerprint.id
         }
       },
-      match: true,
-      coincidence: 62.5,
+      match: result === '1',
       createdBy: {
         connect: {
           id: userId
@@ -63,18 +69,24 @@ const Mutation = {
       }
     })
 
-    // exec('wine library/FingerprintVerification.exe https://firebasestorage.googleapis.com/v0/b/fingerprint-verification-70d6f.appspot.com/o/images%2Frexgdn60y_fingerprint.jpg?alt=media https://firebasestorage.googleapis.com/v0/b/fingerprint-verification-70d6f.appspot.com/o/images%2Fuh2m5t0sx_fingerprint.jpg?alt=media', (error, stdout, stderr) => {
-    //   if (error) {
-    //     console.error(`exec error: ${error}`)
-    //     // return
-    //   }
-    //   console.log(`stdout: ${stdout}`)
-    //   console.error(`stderr: ${stderr}`)
-    // })
+    await context.prisma.updateFingerprint({
+      data: {
+        verificationID: verification.id
+      },
+      where: {
+        id: upsertedFirstFingerprint.id
+      }
+    })
 
-    const result = await runLibrary('wine library/FingerprintVerification.exe https://firebasestorage.googleapis.com/v0/b/fingerprint-verification-70d6f.appspot.com/o/images%2Frexgdn60y_fingerprint.jpg?alt=media https://firebasestorage.googleapis.com/v0/b/fingerprint-verification-70d6f.appspot.com/o/images%2Fuh2m5t0sx_fingerprint.jpg?alt=media')
+    await context.prisma.updateFingerprint({
+      data: {
+        verificationID: verification.id
+      },
+      where: {
+        id: upsertedSecondFingerprint.id
+      }
+    })
 
-    console.log({ result })
     return verification
   }
 }

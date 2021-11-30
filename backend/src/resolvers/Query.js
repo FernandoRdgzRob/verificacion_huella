@@ -1,7 +1,7 @@
 const { checkValidUser } = require('../utils')
 
 const Query = {
-  getAllVerifications: async (parent, args, context) => {
+  getAllVerifications: async (parent, args, context, info) => {
     const userId = await checkValidUser(context)
 
     const verifications = await context.prisma.verifications({
@@ -10,9 +10,7 @@ const Query = {
           id: userId
         }
       }
-    })
-
-    // Probar código para llamar .exe desde Node.js
+    }, info)
 
     return verifications
   }

@@ -3,6 +3,7 @@ type Fingerprint {
   type: String!
   side: String!
   filelink: String!
+  verificationID: String
 }
 
 type Verification {
@@ -10,7 +11,6 @@ type Verification {
   fingerprintA: Fingerprint!  @relation(name: "FingerprintA")
   fingerprintB: Fingerprint! @relation(name: "FingerprintB")
   match: Boolean!
-  coincidence: Float!
   createdBy: User!
   createdAt: DateTime! @createdAt
 }

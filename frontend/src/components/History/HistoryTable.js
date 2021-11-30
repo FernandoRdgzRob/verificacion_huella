@@ -1,18 +1,20 @@
 import React from 'react'
+import { format } from 'date-fns'
 import { makeStyles } from '@material-ui/core/styles'
-import Box from '@material-ui/core/Box'
-import Collapse from '@material-ui/core/Collapse'
-import IconButton from '@material-ui/core/IconButton'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableContainer from '@material-ui/core/TableContainer'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import Typography from '@material-ui/core/Typography'
-import Paper from '@material-ui/core/Paper'
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
+import { KeyboardArrowDownIcon, KeyboardArrowUpIcon } from '@material-ui/icons'
+import {
+  Box,
+  Collapse,
+  IconButton,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography
+} from '@material-ui/core'
 
 const useRowStyles = makeStyles({
   root: {
@@ -22,27 +24,16 @@ const useRowStyles = makeStyles({
   }
 })
 
-const createData = (id, date, result) => {
-  return {
-    id,
-    date,
-    result,
-    details: [
-      { fingerprint: 'huellaA.jpg', detailsOne: 'hh:mm', detailsTwo: '##% de similitud' },
-      { fingerprint: 'huellaB.jpg', detailsOne: 'Tipo: índice', detailsTwo: 'Lado: derecho' }
-    ]
-  }
+const fingerprintDict = {
+  thumb: 'Dedo pulgar',
+  index: 'Dedo índice',
+  ring: 'Dedo anular',
+  little: 'Dedo meñique',
+  palm: 'Palma de la mano'
 }
 
-const rows = [
-  createData('000001', '04/09/21', 'Positivo'),
-  createData('000002', '05/09/21', 'Positivo'),
-  createData('000003', '05/09/21', 'Positivo'),
-  createData('000004', '08/09/21', 'Positivo'),
-  createData('000005', '13/09/21', 'Positivo')
-]
-
-const HistoryTable = () => {
+const HistoryTable = ({ data }) => {
+  console.log({ data })
   return (
     <TableContainer component={Paper}>
       <Table aria-label='collapsible table'>
@@ -55,8 +46,8 @@ const HistoryTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <Row key={row.name} row={row} />
+          {data.map((row, index) => (
+            <Row key={index} index={index} row={row} />
           ))}
         </TableBody>
       </Table>
@@ -65,7 +56,8 @@ const HistoryTable = () => {
 }
 
 const Row = (props) => {
-  const { row } = props
+  const { index, row } = props
+  console.log({ index })
   const [open, setOpen] = React.useState(false)
   const classes = useRowStyles()
 
@@ -80,10 +72,10 @@ const Row = (props) => {
           </IconButton>
         </TableCell>
         <TableCell component='th' scope='row'>
-          {row.id}
+          {`00000${index}`}
         </TableCell>
-        <TableCell>{row.date}</TableCell>
-        <TableCell>{row.result}</TableCell>
+        <TableCell>{format(new Date(row.createdAt), 'dd/MM/yyyy')}</TableCell>
+        <TableCell>{row.match ? 'Positivo' : 'Negativo'}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -94,15 +86,18 @@ const Row = (props) => {
               </Typography>
               <Table size='small' aria-label='purchases'>
                 <TableBody>
-                  {row.details.map((historyRow) => (
-                    <TableRow key={historyRow.fingerprint}>
-                      <TableCell component='th' scope='row'>
-                        {historyRow.fingerprint}
-                      </TableCell>
-                      <TableCell>{historyRow.detailsOne}</TableCell>
-                      <TableCell>{historyRow.detailsTwo}</TableCell>
-                    </TableRow>
-                  ))}
+                  <TableRow>
+                    <TableCell component='th' scope='row'>
+                      <a href={row.fingerprintA.filelink} target='_blank' rel='noreferrer'>Huella A</a>
+                    </TableCell>
+                    <TableCell>{fingerprintDict[row.fingerprintA.type]}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell component='th' scope='row'>
+                      <a href={row.fingerprintB.filelink} target='_blank' rel='noreferrer'>Huella B</a>
+                    </TableCell>
+                    <TableCell>{row.fingerprintB.side === 'right' ? 'Lado derecho' : 'Lado izquierdo'}</TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </Box>

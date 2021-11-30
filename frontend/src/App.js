@@ -44,23 +44,23 @@ function App () {
       path: '/historial',
       sidebar: () => <Sidebar />,
       main: () => <History />
-    },
-    {
-      path: '/perfil',
-      sidebar: () => <Sidebar />,
-      main: () => <Profile />
-    },
-    {
-      path: '/admin',
-      sidebar: () => <Sidebar />,
-      main: () => {
-        if (matches) {
-          return <Admin />
-        } else {
-          return <MobileAdmin />
-        }
-      }
     }
+    // {
+    //   path: '/perfil',
+    //   sidebar: () => <Sidebar />,
+    //   main: () => <Profile />
+    // },
+    // {
+    //   path: '/admin',
+    //   sidebar: () => <Sidebar />,
+    //   main: () => {
+    //     if (matches) {
+    //       return <Admin />
+    //     } else {
+    //       return <MobileAdmin />
+    //     }
+    //   }
+    // }
   ]
 
   return (

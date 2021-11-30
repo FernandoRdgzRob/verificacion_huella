@@ -26,6 +26,7 @@ type Fingerprint {
   type: String!
   side: String!
   filelink: String!
+  verificationID: String
 }
 
 type FingerprintConnection {
@@ -39,6 +40,7 @@ input FingerprintCreateInput {
   type: String!
   side: String!
   filelink: String!
+  verificationID: String
 }
 
 input FingerprintCreateOneInput {
@@ -60,6 +62,8 @@ enum FingerprintOrderByInput {
   side_DESC
   filelink_ASC
   filelink_DESC
+  verificationID_ASC
+  verificationID_DESC
 }
 
 type FingerprintPreviousValues {
@@ -67,6 +71,7 @@ type FingerprintPreviousValues {
   type: String!
   side: String!
   filelink: String!
+  verificationID: String
 }
 
 type FingerprintSubscriptionPayload {
@@ -91,18 +96,21 @@ input FingerprintUpdateDataInput {
   type: String
   side: String
   filelink: String
+  verificationID: String
 }
 
 input FingerprintUpdateInput {
   type: String
   side: String
   filelink: String
+  verificationID: String
 }
 
 input FingerprintUpdateManyMutationInput {
   type: String
   side: String
   filelink: String
+  verificationID: String
 }
 
 input FingerprintUpdateOneRequiredInput {
@@ -174,6 +182,20 @@ input FingerprintWhereInput {
   filelink_not_starts_with: String
   filelink_ends_with: String
   filelink_not_ends_with: String
+  verificationID: String
+  verificationID_not: String
+  verificationID_in: [String!]
+  verificationID_not_in: [String!]
+  verificationID_lt: String
+  verificationID_lte: String
+  verificationID_gt: String
+  verificationID_gte: String
+  verificationID_contains: String
+  verificationID_not_contains: String
+  verificationID_starts_with: String
+  verificationID_not_starts_with: String
+  verificationID_ends_with: String
+  verificationID_not_ends_with: String
   AND: [FingerprintWhereInput!]
   OR: [FingerprintWhereInput!]
   NOT: [FingerprintWhereInput!]
@@ -442,7 +464,6 @@ type Verification {
   fingerprintA: Fingerprint!
   fingerprintB: Fingerprint!
   match: Boolean!
-  coincidence: Float!
   createdBy: User!
   createdAt: DateTime!
 }
@@ -458,7 +479,6 @@ input VerificationCreateInput {
   fingerprintA: FingerprintCreateOneInput!
   fingerprintB: FingerprintCreateOneInput!
   match: Boolean!
-  coincidence: Float!
   createdBy: UserCreateOneInput!
 }
 
@@ -472,8 +492,6 @@ enum VerificationOrderByInput {
   id_DESC
   match_ASC
   match_DESC
-  coincidence_ASC
-  coincidence_DESC
   createdAt_ASC
   createdAt_DESC
 }
@@ -481,7 +499,6 @@ enum VerificationOrderByInput {
 type VerificationPreviousValues {
   id: ID!
   match: Boolean!
-  coincidence: Float!
   createdAt: DateTime!
 }
 
@@ -507,13 +524,11 @@ input VerificationUpdateInput {
   fingerprintA: FingerprintUpdateOneRequiredInput
   fingerprintB: FingerprintUpdateOneRequiredInput
   match: Boolean
-  coincidence: Float
   createdBy: UserUpdateOneRequiredInput
 }
 
 input VerificationUpdateManyMutationInput {
   match: Boolean
-  coincidence: Float
 }
 
 input VerificationWhereInput {
@@ -535,14 +550,6 @@ input VerificationWhereInput {
   fingerprintB: FingerprintWhereInput
   match: Boolean
   match_not: Boolean
-  coincidence: Float
-  coincidence_not: Float
-  coincidence_in: [Float!]
-  coincidence_not_in: [Float!]
-  coincidence_lt: Float
-  coincidence_lte: Float
-  coincidence_gt: Float
-  coincidence_gte: Float
   createdBy: UserWhereInput
   createdAt: DateTime
   createdAt_not: DateTime

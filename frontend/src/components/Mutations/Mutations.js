@@ -7,3 +7,11 @@ export const LOGIN = gql`
     }
   }
 `
+
+export const CREATE_VERIFICATION = gql`
+  mutation CreateVerification($input: CreateVerificationInput!) {
+    createVerification(input: $input) {
+      id
+    }
+  }
+`
