@@ -195,7 +195,11 @@ export type FingerprintOrderByInput =
   | "type_ASC"
   | "type_DESC"
   | "side_ASC"
-  | "side_DESC";
+  | "side_DESC"
+  | "filelink_ASC"
+  | "filelink_DESC"
+  | "verificationID_ASC"
+  | "verificationID_DESC";
 
 export type UserOrderByInput =
   | "id_ASC"
@@ -216,8 +220,6 @@ export type VerificationOrderByInput =
   | "id_DESC"
   | "match_ASC"
   | "match_DESC"
-  | "coincidence_ASC"
-  | "coincidence_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC";
 
@@ -270,6 +272,34 @@ export interface FingerprintWhereInput {
   side_not_starts_with?: Maybe<String>;
   side_ends_with?: Maybe<String>;
   side_not_ends_with?: Maybe<String>;
+  filelink?: Maybe<String>;
+  filelink_not?: Maybe<String>;
+  filelink_in?: Maybe<String[] | String>;
+  filelink_not_in?: Maybe<String[] | String>;
+  filelink_lt?: Maybe<String>;
+  filelink_lte?: Maybe<String>;
+  filelink_gt?: Maybe<String>;
+  filelink_gte?: Maybe<String>;
+  filelink_contains?: Maybe<String>;
+  filelink_not_contains?: Maybe<String>;
+  filelink_starts_with?: Maybe<String>;
+  filelink_not_starts_with?: Maybe<String>;
+  filelink_ends_with?: Maybe<String>;
+  filelink_not_ends_with?: Maybe<String>;
+  verificationID?: Maybe<String>;
+  verificationID_not?: Maybe<String>;
+  verificationID_in?: Maybe<String[] | String>;
+  verificationID_not_in?: Maybe<String[] | String>;
+  verificationID_lt?: Maybe<String>;
+  verificationID_lte?: Maybe<String>;
+  verificationID_gt?: Maybe<String>;
+  verificationID_gte?: Maybe<String>;
+  verificationID_contains?: Maybe<String>;
+  verificationID_not_contains?: Maybe<String>;
+  verificationID_starts_with?: Maybe<String>;
+  verificationID_not_starts_with?: Maybe<String>;
+  verificationID_ends_with?: Maybe<String>;
+  verificationID_not_ends_with?: Maybe<String>;
   AND?: Maybe<FingerprintWhereInput[] | FingerprintWhereInput>;
   OR?: Maybe<FingerprintWhereInput[] | FingerprintWhereInput>;
   NOT?: Maybe<FingerprintWhereInput[] | FingerprintWhereInput>;
@@ -277,6 +307,7 @@ export interface FingerprintWhereInput {
 
 export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
+  email?: Maybe<String>;
 }>;
 
 export interface UserWhereInput {
@@ -380,14 +411,6 @@ export interface VerificationWhereInput {
   fingerprintB?: Maybe<FingerprintWhereInput>;
   match?: Maybe<Boolean>;
   match_not?: Maybe<Boolean>;
-  coincidence?: Maybe<Int>;
-  coincidence_not?: Maybe<Int>;
-  coincidence_in?: Maybe<Int[] | Int>;
-  coincidence_not_in?: Maybe<Int[] | Int>;
-  coincidence_lt?: Maybe<Int>;
-  coincidence_lte?: Maybe<Int>;
-  coincidence_gt?: Maybe<Int>;
-  coincidence_gte?: Maybe<Int>;
   createdBy?: Maybe<UserWhereInput>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
@@ -406,16 +429,22 @@ export interface FingerprintCreateInput {
   id?: Maybe<ID_Input>;
   type: String;
   side: String;
+  filelink: String;
+  verificationID?: Maybe<String>;
 }
 
 export interface FingerprintUpdateInput {
   type?: Maybe<String>;
   side?: Maybe<String>;
+  filelink?: Maybe<String>;
+  verificationID?: Maybe<String>;
 }
 
 export interface FingerprintUpdateManyMutationInput {
   type?: Maybe<String>;
   side?: Maybe<String>;
+  filelink?: Maybe<String>;
+  verificationID?: Maybe<String>;
 }
 
 export interface UserCreateInput {
@@ -448,7 +477,6 @@ export interface VerificationCreateInput {
   fingerprintA: FingerprintCreateOneInput;
   fingerprintB: FingerprintCreateOneInput;
   match: Boolean;
-  coincidence: Int;
   createdBy: UserCreateOneInput;
 }
 
@@ -466,7 +494,6 @@ export interface VerificationUpdateInput {
   fingerprintA?: Maybe<FingerprintUpdateOneRequiredInput>;
   fingerprintB?: Maybe<FingerprintUpdateOneRequiredInput>;
   match?: Maybe<Boolean>;
-  coincidence?: Maybe<Int>;
   createdBy?: Maybe<UserUpdateOneRequiredInput>;
 }
 
@@ -480,6 +507,8 @@ export interface FingerprintUpdateOneRequiredInput {
 export interface FingerprintUpdateDataInput {
   type?: Maybe<String>;
   side?: Maybe<String>;
+  filelink?: Maybe<String>;
+  verificationID?: Maybe<String>;
 }
 
 export interface FingerprintUpsertNestedInput {
@@ -509,7 +538,6 @@ export interface UserUpsertNestedInput {
 
 export interface VerificationUpdateManyMutationInput {
   match?: Maybe<Boolean>;
-  coincidence?: Maybe<Int>;
 }
 
 export interface FingerprintSubscriptionWhereInput {
@@ -565,12 +593,16 @@ export interface Fingerprint {
   id: ID_Output;
   type: String;
   side: String;
+  filelink: String;
+  verificationID?: String;
 }
 
 export interface FingerprintPromise extends Promise<Fingerprint>, Fragmentable {
   id: () => Promise<ID_Output>;
   type: () => Promise<String>;
   side: () => Promise<String>;
+  filelink: () => Promise<String>;
+  verificationID: () => Promise<String>;
 }
 
 export interface FingerprintSubscription
@@ -579,6 +611,8 @@ export interface FingerprintSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   type: () => Promise<AsyncIterator<String>>;
   side: () => Promise<AsyncIterator<String>>;
+  filelink: () => Promise<AsyncIterator<String>>;
+  verificationID: () => Promise<AsyncIterator<String>>;
 }
 
 export interface FingerprintNullablePromise
@@ -587,6 +621,8 @@ export interface FingerprintNullablePromise
   id: () => Promise<ID_Output>;
   type: () => Promise<String>;
   side: () => Promise<String>;
+  filelink: () => Promise<String>;
+  verificationID: () => Promise<String>;
 }
 
 export interface FingerprintConnection {
@@ -765,7 +801,6 @@ export interface AggregateUserSubscription
 export interface Verification {
   id: ID_Output;
   match: Boolean;
-  coincidence: Int;
   createdAt: DateTimeOutput;
 }
 
@@ -776,7 +811,6 @@ export interface VerificationPromise
   fingerprintA: <T = FingerprintPromise>() => T;
   fingerprintB: <T = FingerprintPromise>() => T;
   match: () => Promise<Boolean>;
-  coincidence: () => Promise<Int>;
   createdBy: <T = UserPromise>() => T;
   createdAt: () => Promise<DateTimeOutput>;
 }
@@ -788,7 +822,6 @@ export interface VerificationSubscription
   fingerprintA: <T = FingerprintSubscription>() => T;
   fingerprintB: <T = FingerprintSubscription>() => T;
   match: () => Promise<AsyncIterator<Boolean>>;
-  coincidence: () => Promise<AsyncIterator<Int>>;
   createdBy: <T = UserSubscription>() => T;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -800,7 +833,6 @@ export interface VerificationNullablePromise
   fingerprintA: <T = FingerprintPromise>() => T;
   fingerprintB: <T = FingerprintPromise>() => T;
   match: () => Promise<Boolean>;
-  coincidence: () => Promise<Int>;
   createdBy: <T = UserPromise>() => T;
   createdAt: () => Promise<DateTimeOutput>;
 }
@@ -906,6 +938,8 @@ export interface FingerprintPreviousValues {
   id: ID_Output;
   type: String;
   side: String;
+  filelink: String;
+  verificationID?: String;
 }
 
 export interface FingerprintPreviousValuesPromise
@@ -914,6 +948,8 @@ export interface FingerprintPreviousValuesPromise
   id: () => Promise<ID_Output>;
   type: () => Promise<String>;
   side: () => Promise<String>;
+  filelink: () => Promise<String>;
+  verificationID: () => Promise<String>;
 }
 
 export interface FingerprintPreviousValuesSubscription
@@ -922,6 +958,8 @@ export interface FingerprintPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   type: () => Promise<AsyncIterator<String>>;
   side: () => Promise<AsyncIterator<String>>;
+  filelink: () => Promise<AsyncIterator<String>>;
+  verificationID: () => Promise<AsyncIterator<String>>;
 }
 
 export interface UserSubscriptionPayload {
@@ -1008,7 +1046,6 @@ export interface VerificationSubscriptionPayloadSubscription
 export interface VerificationPreviousValues {
   id: ID_Output;
   match: Boolean;
-  coincidence: Int;
   createdAt: DateTimeOutput;
 }
 
@@ -1017,7 +1054,6 @@ export interface VerificationPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   match: () => Promise<Boolean>;
-  coincidence: () => Promise<Int>;
   createdAt: () => Promise<DateTimeOutput>;
 }
 
@@ -1026,7 +1062,6 @@ export interface VerificationPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   match: () => Promise<AsyncIterator<Boolean>>;
-  coincidence: () => Promise<AsyncIterator<Int>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 

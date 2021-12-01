@@ -15,6 +15,7 @@ type Fingerprint {
   id: ID!
   type: String!
   side: String!
+  filelink: String!
 }
 
 type User {
@@ -26,20 +27,21 @@ type User {
 
 type Verification {
   id: ID!
-  firstFingerprint: Fingerprint!
-  secondFingerprint: Fingerprint!
+  fingerprintA: Fingerprint!
+  fingerprintB: Fingerprint!
   match: Boolean!
-  coincidence: Float!
+  # coincidence: Float!
   createdAt: DateTime!
+  createdBy: User!
 }
 
 # Payloads
 type VerificationPayload {
   id: ID!
-  firstFingerprint: Fingerprint!
-  secondFingerprint: Fingerprint!
+  fingerprintA: Fingerprint!
+  fingerprintB: Fingerprint!
   match: Boolean!
-  coincidence: Float!
+  # coincidence: Float!
   createdAt: DateTime!
 }
 
@@ -57,6 +59,7 @@ input CreateVerificationInput {
 input FingerprintInput {
   type: String!
   side: String!
+  filelink: String!
 }
 
 input SignUpInput {

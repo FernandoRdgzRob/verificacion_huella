@@ -11,6 +11,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import Sidebar from './components/Sidebar/Sidebar'
 import History from './components/History/History'
 import Admin from './components/Admin/Admin'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
+import MobileAdmin from './components/Admin/MobileAdmin'
+import PrivateRoute from './components/Utils/PrivateRoute'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,34 +22,46 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing(3)
+  },
+  history: {
+    flexGrow: 1,
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3)
   }
 }))
 
-const routes = [
-  {
-    path: '/verificacion',
-    sidebar: () => <Sidebar />,
-    main: () => <Verification />
-  },
-  {
-    path: '/historial',
-    sidebar: () => <Sidebar />,
-    main: () => <History />
-  },
-  {
-    path: '/perfil',
-    sidebar: () => <Sidebar />,
-    main: () => <Profile />
-  },
-  {
-    path: '/admin',
-    sidebar: () => <Sidebar />,
-    main: () => <Admin />
-  }
-]
-
 function App () {
+  const matches = useMediaQuery('(min-width:600px)')
   const classes = useStyles()
+
+  const routes = [
+    {
+      path: '/verificacion',
+      sidebar: () => <Sidebar />,
+      main: () => <Verification />
+    },
+    {
+      path: '/historial',
+      sidebar: () => <Sidebar />,
+      main: () => <History />
+    }
+    // {
+    //   path: '/perfil',
+    //   sidebar: () => <Sidebar />,
+    //   main: () => <Profile />
+    // },
+    // {
+    //   path: '/admin',
+    //   sidebar: () => <Sidebar />,
+    //   main: () => {
+    //     if (matches) {
+    //       return <Admin />
+    //     } else {
+    //       return <MobileAdmin />
+    //     }
+    //   }
+    // }
+  ]
 
   return (
     <Router>
@@ -58,7 +73,9 @@ function App () {
               path={route.path}
               exact={route.exact}
             >
-              <route.sidebar />
+              <PrivateRoute>
+                <route.sidebar />
+              </PrivateRoute>
             </Route>
           ))}
         </Switch>
@@ -69,9 +86,11 @@ function App () {
               path={route.path}
               exact={route.exact}
             >
-              <main className={classes.content}>
-                <route.main />
-              </main>
+              <PrivateRoute>
+                <main className={index === 1 ? classes.history : classes.content}>
+                  <route.main />
+                </main>
+              </PrivateRoute>
             </Route>
           ))}
         </Switch>

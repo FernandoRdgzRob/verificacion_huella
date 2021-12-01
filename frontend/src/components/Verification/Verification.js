@@ -2,9 +2,16 @@ import React from 'react'
 // React Router
 import { withRouter } from 'react-router'
 // Material UI
-import { Button, Container, Grid, Typography } from '@material-ui/core'
+import { Button, CircularProgress, Container, Grid, Typography } from '@material-ui/core'
 // Utils
 import VerificationForm from './VerificationForm'
+import storage from '../../firebase'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { useMutation } from '@apollo/client'
+import { CREATE_VERIFICATION } from '../Mutations/Mutations'
+import { useSnackbar } from 'notistack'
+import { useHistory } from 'react-router-dom'
+import { GET_ALL_VERIFICATIONS } from '../Queries/Queries'
 
 const Verification = () => {
   // Fingerprint one
@@ -25,6 +32,24 @@ const Verification = () => {
   const [imageErrorOne, setImageErrorOne] = React.useState('')
   const [imageErrorTwo, setImageErrorTwo] = React.useState('')
 
+  const history = useHistory()
+  const { enqueueSnackbar } = useSnackbar()
+
+  const handleOnCompleted = (data) => {
+    console.log({ data })
+    history.push('/historial')
+    enqueueSnackbar('Verificación procesada exitosamente', { variant: 'success' })
+  }
+
+  const [loadingFirebase, setLoadingFirebase] = React.useState(false)
+  const [createVerification, { loading }] = useMutation(CREATE_VERIFICATION, {
+    onCompleted: handleOnCompleted,
+    refetchQueries: [
+      { query: GET_ALL_VERIFICATIONS }
+    ],
+    awaitRefetchQueries: true
+  })
+
   const validateForm = () => {
     let valid = true
     if (fingerprintLocationOne !== fingerprintLocationTwo) {
@@ -42,7 +67,7 @@ const Verification = () => {
     }
 
     if (fileOne) {
-      console.log(fileOne.type)
+      // console.log(fileOne.type)
       if (fileOne.type !== 'image/jpg' && fileOne.type !== 'image/jpeg' && fileOne.type !== 'image/bmp') {
         setImageErrorOne('Solo se aceptan los formatos .jpg y .bmp')
         valid = false
@@ -69,26 +94,54 @@ const Verification = () => {
     return valid
   }
 
-  const onSubmit = () => {
+  const uploadToFirebase = async () => {
+    let downloadURLOne = null
+    let downloadURLTwo = null
+    try {
+      const storageRefA = ref(storage, `/images/${Math.random().toString(36).substr(2, 9)}_${fileOne.name}`)
+      const snapshotOne = await uploadBytes(storageRefA, fileOne)
+      downloadURLOne = await getDownloadURL(snapshotOne.ref)
+
+      const storageRefB = ref(storage, `/images/${Math.random().toString(36).substr(2, 9)}_${fileTwo.name}`)
+      const snapshotTwo = await uploadBytes(storageRefB, fileTwo)
+      downloadURLTwo = await getDownloadURL(snapshotTwo.ref)
+    } catch (error) {
+      console.log({ error })
+    }
+
+    return [downloadURLOne, downloadURLTwo]
+  }
+
+  const onSubmit = async () => {
     const valid = validateForm()
 
-    const fingerprintOne = {
-      location: fingerprintLocationOne,
-      side: sideOne,
-      file: fileOne
-    }
+    if (valid) {
+      setLoadingFirebase(true)
+      const [filelinkOne, filelinkTwo] = await uploadToFirebase()
 
-    const fingerprintTwo = {
-      location: fingerprintLocationTwo,
-      side: sideTwo,
-      file: fileTwo
-    }
+      const firstFingerprint = {
+        type: fingerprintLocationOne,
+        side: sideOne,
+        filelink: filelinkOne
+      }
 
-    console.log({ valid, fingerprintOne, fingerprintTwo })
+      const secondFingerprint = {
+        type: fingerprintLocationTwo,
+        side: sideTwo,
+        filelink: filelinkTwo
+      }
+
+      const input = {
+        firstFingerprint,
+        secondFingerprint
+      }
+
+      setLoadingFirebase(false)
+      createVerification({ variables: { input } })
+    }
   }
 
   return (
-
     <Container maxWidth='md' style={{ marginTop: 30 }}>
       <Typography style={{ marginBottom: 15 }} component='h1' variant='h4'>Verificación</Typography>
       <Grid container spacing={10}>
@@ -125,9 +178,16 @@ const Verification = () => {
           />
         </Grid>
         <Grid item xs={6} md={3}>
-          <Button fullWidth color='primary' onClick={onSubmit} variant='contained'>
-            Verificar
-          </Button>
+          {
+            (loading || loadingFirebase) &&
+              <CircularProgress />
+          }
+          {
+            !(loading || loadingFirebase) &&
+              <Button fullWidth color='primary' onClick={onSubmit} variant='contained'>
+                Verificar
+              </Button>
+          }
         </Grid>
       </Grid>
     </Container>

@@ -1,6 +1,6 @@
 const { hash, compare } = require('bcrypt')
 const { sign } = require('jsonwebtoken')
-const { APP_SECRET } = require('../utils')
+const { APP_SECRET, checkValidUser, runLibrary, getURL } = require('../utils')
 
 const Mutation = {
   signUp: async (parent, { name, email, password }, context) => {
@@ -16,7 +16,7 @@ const Mutation = {
       user
     }
   },
-  logIn: async (parent, { email, password }, context) => {
+  logIn: async (parent, { input: { email, password } }, context) => {
     const user = await context.prisma.user({ email })
     if (!user) {
       throw new Error(`No user found for email: ${email}`)
@@ -31,16 +31,63 @@ const Mutation = {
       user
     }
   },
-  createVerification: async (parent, { firstFingerprint, secondFingerprint }, context) => {
-    const fingerprintOne = await context.prisma.createFingerprint({
-      ...firstFingerprint
+  createVerification: async (parent, args, context) => {
+    const { input: { firstFingerprint, secondFingerprint } } = args
+    const userId = await checkValidUser(context)
+
+    const firstFingerprintURL = getURL(firstFingerprint.filelink)
+    const secondFingerprintURL = getURL(secondFingerprint.filelink)
+
+    const upsertedFirstFingerprint = await context.prisma.createFingerprint({
+      ...firstFingerprint,
+      filelink: firstFingerprintURL
     })
 
-    const fingerprintTwo = await context.prisma.createFingerprint({
-      ...secondFingerprint
+    const upsertedSecondFingerprint = await context.prisma.createFingerprint({
+      ...secondFingerprint,
+      filelink: secondFingerprintURL
     })
 
-    console.log({ fingerprintOne, fingerprintTwo })
+    const result = await runLibrary(`wine library/FingerprintVerification.exe ${firstFingerprintURL} ${secondFingerprintURL}`)
+
+    const verification = await context.prisma.createVerification({
+      fingerprintA: {
+        connect: {
+          id: upsertedFirstFingerprint.id
+        }
+      },
+      fingerprintB: {
+        connect: {
+          id: upsertedSecondFingerprint.id
+        }
+      },
+      match: result === '1',
+      createdBy: {
+        connect: {
+          id: userId
+        }
+      }
+    })
+
+    await context.prisma.updateFingerprint({
+      data: {
+        verificationID: verification.id
+      },
+      where: {
+        id: upsertedFirstFingerprint.id
+      }
+    })
+
+    await context.prisma.updateFingerprint({
+      data: {
+        verificationID: verification.id
+      },
+      where: {
+        id: upsertedSecondFingerprint.id
+      }
+    })
+
+    return verification
   }
 }
 

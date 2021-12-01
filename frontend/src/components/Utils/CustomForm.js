@@ -1,6 +1,6 @@
 import React from 'react'
 // Material UI
-import { Button, Grid, TextField } from '@material-ui/core'
+import { Button, CircularProgress, Grid, TextField } from '@material-ui/core'
 // React Hook Form
 import { useForm } from 'react-hook-form'
 
@@ -21,6 +21,7 @@ const useCustomForm = () => {
 
 const CustomForm = (props) => {
   const {
+    loading,
     form: { fields, submitButton },
     formFunctions: { clearErrors, errors, register, watch },
     onSubmit
@@ -47,22 +48,27 @@ const CustomForm = (props) => {
               placeholder={field.placeholder}
               type={field.type}
               label={field.label}
-              error={errors[field.name]?.type}
+              error={!!errors[field.name]?.type}
               helperText={errors[field.name]?.type ? errors[field.name]?.message : ''}
               {...register(field.name, { required: field.required, pattern: field.pattern })}
             />
           </Grid>
         )}
         <Grid item xs={12}>
-          <Button
-            style={{ marginTop: 10 }}
-            fullWidth
-            color='primary'
-            type='submit'
-            variant='contained'
-          >
-            {submitButton || 'Agregar'}
-          </Button>
+          {loading &&
+            <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+              <CircularProgress />
+            </div>}
+          {!loading &&
+            <Button
+              style={{ marginTop: 10 }}
+              fullWidth
+              color='primary'
+              type='submit'
+              variant='contained'
+            >
+              {submitButton || 'Agregar'}
+            </Button>}
         </Grid>
       </Grid>
     </form>

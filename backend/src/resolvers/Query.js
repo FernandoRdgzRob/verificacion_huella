@@ -1,6 +1,18 @@
+const { checkValidUser } = require('../utils')
+
 const Query = {
-  getAllVerifications: async (parent, args, context) => {
-    return context.prisma.verifications()
+  getAllVerifications: async (parent, args, context, info) => {
+    const userId = await checkValidUser(context)
+
+    const verifications = await context.prisma.verifications({
+      where: {
+        createdBy: {
+          id: userId
+        }
+      }
+    }, info)
+
+    return verifications
   }
 }
 

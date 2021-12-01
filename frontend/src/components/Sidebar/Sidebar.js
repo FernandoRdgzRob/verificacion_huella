@@ -7,13 +7,14 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
-import { Typography } from '@material-ui/core'
+import { Button, IconButton, Typography } from '@material-ui/core'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import FingerprintIcon from '@material-ui/icons/Fingerprint'
 import PeopleIcon from '@material-ui/icons/People'
 import HistoryIcon from '@material-ui/icons/History'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import PersonIcon from '@material-ui/icons/Person'
+import MenuIcon from '@material-ui/icons/Menu'
 
 const drawerWidth = 240
 
@@ -54,10 +55,20 @@ const Sidebar = (props) => {
   const { window } = props
   const classes = useStyles()
   const theme = useTheme()
+  const history = useHistory()
+
   const [mobileOpen, setMobileOpen] = React.useState(false)
+
+  const name = localStorage.getItem('verification-user-name')
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('verification-user-name')
+    history.replace('/')
   }
 
   const modules = [
@@ -70,17 +81,17 @@ const Sidebar = (props) => {
       name: 'Historial',
       icon: <HistoryIcon style={{ color: '#ffffff' }} />,
       route: '/historial'
-    },
-    {
-      name: 'Perfil',
-      icon: <PersonIcon style={{ color: '#ffffff' }} />,
-      route: '/perfil'
-    },
-    {
-      name: 'Control de usuarios',
-      icon: <PeopleIcon style={{ color: '#ffffff' }} />,
-      route: '/admin'
     }
+    // {
+    //   name: 'Perfil',
+    //   icon: <PersonIcon style={{ color: '#ffffff' }} />,
+    //   route: '/perfil'
+    // },
+    // {
+    //   name: 'Control de usuarios',
+    //   icon: <PeopleIcon style={{ color: '#ffffff' }} />,
+    //   route: '/admin'
+    // }
   ]
 
   const drawer = (
@@ -88,8 +99,8 @@ const Sidebar = (props) => {
       <div style={{ display: 'flex', justifyContent: 'center', height: 150 }}>
         <div>
           <PersonIcon style={{ fontSize: '100px' }} />
-          <Typography style={{ fontWeight: 'bold' }}>
-            Nombre Apellido
+          <Typography style={{ fontWeight: 'bold', textAlign: 'center' }}>
+            {name}
           </Typography>
         </div>
       </div>
@@ -105,13 +116,15 @@ const Sidebar = (props) => {
         ))}
       </List>
       <Divider />
-      <List>
-        <Link to='/' style={{ textDecoration: 'none', color: '#ffffff' }}>
-          <ListItem button>
+      <List style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', height: '55%' }}>
+        {/* <Link to='/' style={{ textDecoration: 'none', color: '#ffffff' }}> */}
+        <ListItem>
+          <Button onClick={handleLogout}>
             <ListItemIcon><ExitToAppIcon style={{ color: '#ffffff' }} /></ListItemIcon>
-            <ListItemText primary='Cerrar sesión' />
-          </ListItem>
-        </Link>
+            <ListItemText style={{ color: 'white' }} primary='Cerrar sesión' />
+          </Button>
+        </ListItem>
+        {/* </Link> */}
       </List>
     </div>
   )
@@ -121,6 +134,11 @@ const Sidebar = (props) => {
   return (
     <div>
       <nav className={classes.drawer} aria-label='mailbox folders'>
+        <div style={{ height: '0px', width: '0px', marginTop: '5px', boxSizing: 'border-box' }}>
+          <IconButton onClick={handleDrawerToggle}>
+            <MenuIcon />
+          </IconButton>
+        </div>
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation='css'>
           <Drawer

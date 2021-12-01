@@ -66,7 +66,6 @@ const VerificationForm = (props) => {
   } = props
 
   const matches = useMediaQuery('(min-width:600px)')
-  console.log({ matches })
 
   React.useEffect(() => {
     if (!file) {
@@ -77,13 +76,13 @@ const VerificationForm = (props) => {
     setSrc(objectUrl)
     // Free memory when ever this component is unmounted
     return () => URL.revokeObjectURL(objectUrl)
-  }, [file])
+  }, [file, setSrc])
 
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} md={6}>
         <TextField
-          error={fingerPrintLocationError}
+          error={!!fingerPrintLocationError}
           helperText={fingerPrintLocationError}
           select
           fullWidth
@@ -100,7 +99,7 @@ const VerificationForm = (props) => {
       </Grid>
       <Grid item xs={12} md={6}>
         <TextField
-          error={sideError}
+          error={!!sideError}
           helperText={sideError}
           select
           fullWidth
@@ -116,9 +115,9 @@ const VerificationForm = (props) => {
         </TextField>
       </Grid>
       <Grid item xs={12}>
-        <InputLabel error={imageError} style={{ fontSize: 12.5 }}>Sube la imagen de la huella</InputLabel>
-        <Input error={imageError} fullWidth type='file' onChange={event => setFile(event.target?.files[0])} />
-        <FormHelperText error={imageError}>{imageError || 'Archivos soportados: .jpg, .bmp'}</FormHelperText>
+        <InputLabel error={!!imageError} style={{ fontSize: 12.5 }}>Sube la imagen de la huella</InputLabel>
+        <Input error={!!imageError} fullWidth type='file' onChange={event => setFile(event.target?.files[0])} />
+        <FormHelperText error={!!imageError}>{imageError || 'Archivos soportados: .jpg, .bmp'}</FormHelperText>
       </Grid>
       <Grid
         item
@@ -142,6 +141,7 @@ const VerificationForm = (props) => {
             objectFit: 'contain'
           }}
           src={src || placeholder}
+          alt='Huella'
         />
       </Grid>
     </Grid>
