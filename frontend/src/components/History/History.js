@@ -9,6 +9,10 @@ import { GET_ALL_VERIFICATIONS } from '../Queries/Queries'
 const History = (props) => {
   const { loading, error, data } = useQuery(GET_ALL_VERIFICATIONS)
 
+  if (data) {
+    console.log({ data })
+  }
+
   if (error) {
     console.log({ error })
   }
@@ -25,7 +29,10 @@ const History = (props) => {
   return (
     <Container maxWidth='md' style={{ marginTop: 30 }}>
       <Typography style={{ marginTop: 30, marginBottom: 30 }} component='h1' variant='h4'>Historial</Typography>
-      <HistoryTable data={data.getAllVerifications} />
+      {data?.getAllVerifications?.length === 0 &&
+        <Typography variant='h5'>No hay verificaciones en el historial</Typography>}
+      {data?.getAllVerifications?.length > 0 &&
+        <HistoryTable data={data.getAllVerifications} />}
     </Container>
   )
 }

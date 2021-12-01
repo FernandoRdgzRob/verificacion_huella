@@ -9,6 +9,9 @@ import storage from '../../firebase'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { useMutation } from '@apollo/client'
 import { CREATE_VERIFICATION } from '../Mutations/Mutations'
+import { useSnackbar } from 'notistack'
+import { useHistory } from 'react-router-dom'
+import { GET_ALL_VERIFICATIONS } from '../Queries/Queries'
 
 const Verification = () => {
   // Fingerprint one
@@ -29,12 +32,23 @@ const Verification = () => {
   const [imageErrorOne, setImageErrorOne] = React.useState('')
   const [imageErrorTwo, setImageErrorTwo] = React.useState('')
 
+  const history = useHistory()
+  const { enqueueSnackbar } = useSnackbar()
+
   const handleOnCompleted = (data) => {
     console.log({ data })
+    history.push('/historial')
+    enqueueSnackbar('Verificación procesada exitosamente', { variant: 'success' })
   }
 
   const [loadingFirebase, setLoadingFirebase] = React.useState(false)
-  const [createVerification, { loading }] = useMutation(CREATE_VERIFICATION, { onCompleted: handleOnCompleted })
+  const [createVerification, { loading }] = useMutation(CREATE_VERIFICATION, {
+    onCompleted: handleOnCompleted,
+    refetchQueries: [
+      { query: GET_ALL_VERIFICATIONS }
+    ],
+    awaitRefetchQueries: true
+  })
 
   const validateForm = () => {
     let valid = true

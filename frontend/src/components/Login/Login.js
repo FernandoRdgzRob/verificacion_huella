@@ -51,8 +51,9 @@ const Login = (props) => {
   const matches = useMediaQuery('(min-width:600px)')
 
   const handleOnCompleted = ({ logIn: logInData }) => {
-    const { token } = logInData
+    const { token, user: { name } } = logInData
     localStorage.setItem('token', token)
+    localStorage.setItem('verification-user-name', name)
     history.replace('/verificacion')
   }
 

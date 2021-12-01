@@ -4,6 +4,7 @@ import './index.css'
 import App from './App'
 import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
+import { SnackbarProvider } from 'notistack'
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:4000'
@@ -28,7 +29,9 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <App />
+    <SnackbarProvider>
+      <App />
+    </SnackbarProvider>
   </ApolloProvider>,
   document.getElementById('root')
 )

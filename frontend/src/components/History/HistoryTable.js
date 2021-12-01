@@ -1,9 +1,11 @@
 import React from 'react'
 import { format } from 'date-fns'
 import { makeStyles } from '@material-ui/core/styles'
-import { KeyboardArrowDownIcon, KeyboardArrowUpIcon } from '@material-ui/icons'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 import {
   Box,
+  Button,
   Collapse,
   IconButton,
   Paper,
@@ -15,6 +17,7 @@ import {
   TableRow,
   Typography
 } from '@material-ui/core'
+import ImageModal from './ImageModal'
 
 const useRowStyles = makeStyles({
   root: {
@@ -34,32 +37,47 @@ const fingerprintDict = {
 
 const HistoryTable = ({ data }) => {
   console.log({ data })
+
+  const [open, setOpen] = React.useState(false)
+  const [image, setImage] = React.useState(null)
+
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
+
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label='collapsible table'>
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell style={{ fontWeight: 'bold', color: '#3f51b5' }}>Folio</TableCell>
-            <TableCell style={{ fontWeight: 'bold', color: '#3f51b5' }}>Fecha</TableCell>
-            <TableCell style={{ fontWeight: 'bold', color: '#3f51b5' }}>Resultado</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((row, index) => (
-            <Row key={index} index={index} row={row} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <>
+      <ImageModal open={open} setOpen={setOpen} image={image} setImage={setImage} />
+      <TableContainer component={Paper}>
+        <Table aria-label='collapsible table'>
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              <TableCell style={{ fontWeight: 'bold', color: '#3f51b5' }}>Folio</TableCell>
+              <TableCell style={{ fontWeight: 'bold', color: '#3f51b5' }}>Fecha</TableCell>
+              <TableCell style={{ fontWeight: 'bold', color: '#3f51b5' }}>Resultado</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map((row, index) => (
+              <Row key={index} index={index} row={row} handleClickOpen={handleClickOpen} setImage={setImage} />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   )
 }
 
 const Row = (props) => {
-  const { index, row } = props
-  console.log({ index })
+  const { index, row, handleClickOpen, setImage } = props
   const [open, setOpen] = React.useState(false)
   const classes = useRowStyles()
+
+  const handleOpenModal = ({ filename, filelink }) => {
+    setImage({ filename, filelink })
+    handleClickOpen()
+  }
 
   return (
     <>
@@ -88,15 +106,41 @@ const Row = (props) => {
                 <TableBody>
                   <TableRow>
                     <TableCell component='th' scope='row'>
-                      <a href={row.fingerprintA.filelink} target='_blank' rel='noreferrer'>Huella A</a>
+                      <Button
+                        style={{
+                          textTransform: 'none',
+                          textDecoration: 'underline'
+                        }}
+                        onClick={() => handleOpenModal({
+                          filename: 'Huella A',
+                          filelink: row.fingerprintA.filelink
+                        })}
+                      >
+                        Huella A
+                      </Button>
                     </TableCell>
-                    <TableCell>{fingerprintDict[row.fingerprintA.type]}</TableCell>
+                    <TableCell>
+                      {fingerprintDict[row.fingerprintA.type]}, {row.fingerprintA.side === 'right' ? 'lado derecho' : 'lado izquierdo'}
+                    </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell component='th' scope='row'>
-                      <a href={row.fingerprintB.filelink} target='_blank' rel='noreferrer'>Huella B</a>
+                      <Button
+                        style={{
+                          textTransform: 'none',
+                          textDecoration: 'underline'
+                        }}
+                        onClick={() => handleOpenModal({
+                          filename: 'Huella B',
+                          filelink: row.fingerprintB.filelink
+                        })}
+                      >
+                        Huella B
+                      </Button>
                     </TableCell>
-                    <TableCell>{row.fingerprintB.side === 'right' ? 'Lado derecho' : 'Lado izquierdo'}</TableCell>
+                    <TableCell>
+                      {fingerprintDict[row.fingerprintB.type]}, {row.fingerprintB.side === 'right' ? 'lado derecho' : 'lado izquierdo'}
+                    </TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
